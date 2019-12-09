@@ -24,8 +24,8 @@ To execute all process detailed requires that the following are true.
 
 See the following links for further details of obtaining this software:
 
-https://www.virtualbox.org/
 https://www.centos.org/
+https://www.virtualbox.org/
 
 It is also recommended that Putty is installed on the host PC
 this can be downloaded from the following link:
@@ -40,7 +40,7 @@ Create_dummy_server.txt|Creating VirtualBox VM|1
 Create_an_installation_drive.txt|Creating a CentOS installation disk|2
 Create_an_installation_clone.txt|Creating a template CentOS VM|3
 Create_new_server.txt|Creating a new server (DHCP) using template VM|3
-Complete_DHCP_server_configuration.txt|Completing configuration ofDHCP server|4
+Complete_DHCP_server_configuration.txt|Completing configuration of DHCP server|4
 Create_a_web_server.txt|Creatind a web server|5
 Create_new_server_using_PXE.txt|Creating a new server use PXE|6
 APPENDIX_A.txt|Template for removal of a VM|N/A
