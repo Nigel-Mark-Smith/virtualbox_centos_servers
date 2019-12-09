@@ -14,20 +14,20 @@
 # 'Intel(R) Gigabit ET Dual Port Server Adapter' card installed
 # using the control panel.
 #
-# 									Windows Key+R
-# Set 'Open :' to 					'control netconnections'
-# 									[OK]
-# Double Click on 					<required connection>
-# 									[Properties]
-# Double click on 					'Internet Protocol Version 4 (TCP/IPv4)'
-# Click on tab 						'Alternate Configuration'
-# Click on option 					'User configured'
+# 						Windows Key+R
+# Set 'Open :' to 				'control netconnections'
+# 						[OK]
+# Double Click on 				<required connection>
+# 						[Properties]
+# Double click on 				'Internet Protocol Version 4 (TCP/IPv4)'
+# Click on tab 					'Alternate Configuration'
+# Click on option 				'User configured'
 # In 'IP address' enter 			'10.0.0.2'
 # In 'Subnet mask' enter 			'255.255.255.0' 
 # In 'Default gateway enter			'10.0.0.1'
-# 									[OK]
-# 									[OK]
-# 									[Close]
+# 						[OK]
+# 						[OK]
+# 						[Close]
 
 VBoxManage modifyvm dhcp --nic2 bridged --bridgeadapter2 "Intel(R) Gigabit ET Dual Port Server Adapter"
 
@@ -53,14 +53,14 @@ Change: 'disable = yes' to 'disable = no'
 # d. Configure DHCP
 
 vi /etc/dhcp/dhcpd.conf					! This server will use an additonal NIC
-										! card installed on my host PC.
+							! card installed on my host PC.
 Add:
 
 subnet 10.0.0.0 netmask 255.255.255.0 {
 	option routers 10.0.0.1 ;
 	range 10.0.0.5 10.0.0.16 ;
 	next-server 10.0.0.3;
-    filename "pxelinux/pxelinux.0";
+        filename "pxelinux/pxelinux.0";
 }
 
 # e. Configure PXE 
@@ -100,7 +100,7 @@ display boot.msg
 
 label Linux
     menu label ^Install CentOS via NFS
-	menu default
+    menu default
     kernel images/vmlinuz
     append initrd=images/initrd.img ksdevice=bootif inst.ks=nfs:10.0.0.4:/Installation/ks.cfg inst.repo=nfs:10.0.0.4:/Installation	
 

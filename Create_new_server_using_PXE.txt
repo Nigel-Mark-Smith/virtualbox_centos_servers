@@ -22,7 +22,7 @@ VBoxManage startvm pxe
 # b. 
 
 [F12]		! To display boot device menu
-[l]			! to select LAN
+[l]		! to select LAN
 [enter]		! Installation should start uninterrupted and then run until s boot is required
 [Reboot]	
 
