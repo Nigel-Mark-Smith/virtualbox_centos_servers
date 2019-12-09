@@ -1,0 +1,46 @@
+########################
+#  Create dummy server #
+########################
+
+# In this process a new vm called 'dummy' is created. 
+# As a result of this process a kisckstart file anaconda-ks.cfg 
+# is also generated which can be used subsequently to automate 
+# the installation of CentOS on other new VM's.
+ 
+# a. Create a new VM.
+
+VBoxManage setproperty machinefolder X:\VM
+VBoxManage createvm --name dummy --ostype Linux_64 
+VBoxManage registervm X:\VM\dummy\dummy.vbox
+VBoxManage modifyvm dummy --memory 1024
+VBoxManage modifyvm dummy --vram 16
+VBoxManage storagectl dummy --name SCSI --add scsi --controller LSILogic
+VBoxManage createmedium disk --filename X:\VM\dummy\dummy-disk1.vhd -size 20480 --format VHD
+VBoxManage createmedium disk --filename X:\VM\dummy\dummy-disk2.vhd -size 15360 --format VHD
+VBoxManage storageattach dummy --storagectl SCSI --port 0 --type hdd --medium X:\VM\dummy\dummy-disk1.vhd
+VBoxManage storageattach dummy --storagectl SCSI --port 1 --type hdd --medium X:\VM\dummy\dummy-disk2.vhd
+VBoxManage storageattach dummy --storagectl SCSI --port 2 --type dvddrive --medium X:\VM\CentOS-7-x86_64-Everything-1908.iso
+VBoxManage modifyvm dummy --boot1 disk --boot2 dvd --boot3 floppy --boot4 net
+VBoxManage modifyvm dummy --nic1 bridged --bridgeadapter1 "Realtek PCIe GBE Family Controller"
+VBoxManage startvm dummy
+
+# b. Install CentOS on the VM.
+
+[F12]		! To display boot device menu
+[c]		! to select DVD
+Select 		'Install CentOS 7'
+
+Follow the installation steps detailed in sections 'Enter Server Configuration Details'
+and 'Start Installation' of document 'Manual Installation of CentOS on a VirtualBox VM'
+
+[enter]		! Installation should start uninterrupted and then run until s boot is required
+[Reboot]	
+
+# c. Complete the installation process
+
+Follow the installation steps detailed in section 'Complete Installation'
+of document 'Manual Installation of CentOS on a VirtualBox VM'
+
+su -
+hostnamectl set-hostname dummy		! Set the hostname
+poweroff							! From command terminal	

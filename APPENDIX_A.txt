@@ -1,0 +1,18 @@
+##############
+# APPENDIX A #
+##############
+
+This appendix provides a template for the complete removal of a VirtualBox
+VM. In this case all the commands necessary for removing the 'dummy' VM
+created in process 'Create dummy server' 
+
+# a. Removing VM
+
+VBoxManage controlvm dummy poweroff
+VBoxManage storageattach dummy --storagectl SCSI --port 0 --type hdd --medium none
+VBoxManage storageattach dummy --storagectl SCSI --port 1 --type hdd --medium none
+VBoxManage storageattach dummy --storagectl SCSI --port 2 --type hdd --medium none
+VBoxManage closemedium disk X:\VM\dummy\dummy-disk1.vhd --delete
+VBoxManage closemedium disk X:\VM\dummy\dummy-disk2.vhd --delete
+VBoxManage storagectl dummy --remove --name SCSI 
+VBoxManage unregistervm dummy --delete

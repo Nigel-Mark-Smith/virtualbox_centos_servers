@@ -1,0 +1,18 @@
+################################
+# Create an installation clone #
+################################
+
+# In this process a new VM 'installation' is created by cloning the 
+# the 'dummy' VM ceated in the 'Create dummy server' and 'Create an installation drive'
+# processes. Subsequent new VM's can be created by cloning the 'installation' VM further
+# reducing the effort required in creating new VM's. The 'dummy' VM is deleted as part 
+# of this process.
+
+VBoxManage storageattach dummy --storagectl SCSI --port 0 --type hdd --medium none
+VBoxManage closemedium disk X:\VM\dummy\dummy-disk1.vhd --delete
+VBoxManage modifyvm dummy --boot1 disk --boot2 dvd --boot3 floppy --boot4 net
+VBoxManage clonevm dummy --mode all --name installation --register
+# Installation disk becomes installation-disk1
+VBoxManage storageattach dummy --storagectl SCSI --port 1 --type hdd --medium none
+VBoxManage closemedium disk X:\VM\dummy\dummy-disk2.vhd --delete
+VBoxManage unregistervm dummy --delete

@@ -1,0 +1,99 @@
+#######################
+# Create a web server #
+#######################
+
+# In this process a new server called 'web' is created by the process
+# detailed in 'Create new server' and configured so it can act as a software 
+# repository server to support PXE installation via HTTP or NFS (default) . 
+# An additional ethernet interface is added using a PCIe NIC card installed 
+# into the Host PC system.
+
+# a. Create a new server 'web' using the process detailed in 'Create new server'.
+
+# b. Add new installation disk and PXE ethernet interface
+
+VBoxManage createmedium disk --filename X:\VM\installation\installation-disk2.vhd -size 15360 --format VHD
+VBoxManage storageattach web --storagectl SCSI --port 1 --type hdd --medium X:\VM\installation\installation-disk2.vhd
+VBoxManage storageattach web --storagectl SCSI --port 2 --type hdd --medium X:\VM\installation\installation-disk1.vhd
+VBoxManage storageattach web --storagectl SCSI --port 3 --type dvddrive --medium X:\VM\CentOS-7-x86_64-Everything-1908.iso
+VBoxManage modifyvm web --nic2 bridged --bridgeadapter2 "Intel(R) Gigabit ET Dual Port Server Adapter"
+VBoxManage startvm web
+
+# c. Configue and activate PXE ethernet interface
+
+su -
+hostnamectl set-hostname web
+nmcli con add con-name pxe ifname enp0s8 autoconnect yes type ethernet ip4 10.0.0.4/8 gw4 10.0.0.1
+nmcli con up pxe
+
+# d. Copy ISO DVD contents to new Installation disk
+
+gdisk /dev/sdb
+n		! New partition ( all disk )
+[Enter]		! Defaullt patition 1
+[Enter]		! Default first sector
+[Enter]		! Default last sector
+[Enter]		! Default partition type 8300 (LINUX)
+w		! Write partition
+y		! Confirm operation.
+
+
+mkfs.xfs /dev/sdb1
+mkdir -p /web
+echo "/dev/sdb1 /web xfs defaults 0 0" >> /etc/fstab
+mount -a
+chmod -R 777 /web
+cd /web
+mkdir install
+cd "/run/media/user/CentOS 7 x86_64"
+cp -R . /web/install				! This will take some time
+
+# e. Copy kickstart file to new installation disk
+
+mount /dev/sdc1 /mnt
+cd /mnt
+cp ks.cfg /web/install
+cd /
+umount /mnt
+
+# f. Install and configure web server
+
+yum groups install -y "Basic Web Server"
+
+ln -s /web/install /var/www/html/install
+setenforce 0
+
+vi /etc/sysconfig/selinux
+
+Change
+
+'SELINUX=enforcing' to 'SELINUX=disabled'
+
+# g. Start web server and make web services available
+
+systemctl start httpd
+systemctl enable httpd
+firewall-cmd --add-service=http --permanent
+firewall-cmd --reload
+
+# h. Install and configure nfs
+
+yum install -y nfs-utils
+
+mkdir /Installation
+chmod 777 /Installation
+echo "/dev/sdc1 /Installation xfs defaults 0 0" >> /etc/fstab
+mount -a
+
+echo "/Installation *(rw)" >> /etc/exports
+echo "10.0.0.3 dhcp" >> /etc/hosts
+echo "10.0.0.4 web" >> /etc/hosts
+
+# Start nfs services and add required services to firewall-cmd
+
+systemctl start nfs.service
+systemctl enable nfs.service
+firewall-cmd --add-service=nfs --permanent
+firewall-cmd --add-service rpc-bind --permanent
+firewall-cmd --add-service mountd --permanent
+firewall-cmd --reload

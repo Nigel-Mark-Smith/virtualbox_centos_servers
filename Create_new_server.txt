@@ -1,0 +1,48 @@
+#####################
+# Create new server #
+#####################
+
+# In this process a DCHP server called 'dhcp' is created.
+# The installation uses the installation drive created by
+# the processes detailed in 'Create installation drive' and 
+# 'Create an installation clone'. The installation is semi-automatic 
+# as a result of the kickstart file installed on the drive.
+
+# a. Create a new VM
+
+VBoxManage clonevm installation --mode all --name dhcp --register
+VBoxManage createmedium disk --filename X:\VM\dhcp\root-disk1.vhd -size 20480 --format VHD
+VBoxManage storageattach dhcp --storagectl SCSI --port 0 --type hdd --medium X:\VM\dhcp\root-disk1.vhd
+VBoxManage storageattach dhcp --storagectl SCSI --port 2 --type dvddrive --medium X:\VM\CentOS-7-x86_64-Everything-1908.iso
+
+# b. Start kickstart installation manually
+#
+# This is started by selecting CD from the boot device
+# menu (F12) and then altering the boot options for
+# 'Install CentOS 7' 
+
+VBoxManage startvm dhcp
+
+[F12]		! To display boot device menu
+[c]			! to select DVD
+Select 		'Install CentOS 7'
+[tab]		!Should show boot arguments
+Insert 		'inst.repo=hd:LABEL=OEMDRV' before 'inst.stage2=hd:LABEL=...'
+Change 		'inst.stage2=hd:LABEL=...' to 'inst.stage2=hd:LABEL=OEMDRV'
+[enter]		! Installation should start uninterrupted and then run until s boot is required
+[Reboot]	! This does not seem to work properly
+
+# c. Complete installation
+
+Follow the installation steps detailed in section 'Complete Installation'
+of document 'Manual Installation of CentOS on a VirtualBox VM'
+
+su -
+hostnamectl set-hostname dhcp		! Set the hostname
+poweroff							! From command terminal	
+
+# d. Dismount DVD and Dismount and remove installation disk copy. 
+
+VBoxManage storageattach dhcp --storagectl SCSI --port 1 --type hdd --medium none
+VBoxManage storageattach dhcp --storagectl SCSI --port 2 --type hdd --medium none
+VBoxManage closemedium disk X:\VM\dhcp\dhcp-disk1.vhd --delete

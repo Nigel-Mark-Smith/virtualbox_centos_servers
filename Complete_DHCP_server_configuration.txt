@@ -1,0 +1,123 @@
+######################################
+# Complete DHCP server configuration #
+######################################
+
+# In this process the DCHP server called 'dhcp' created by process
+# detailed in 'Create new server' is configured so it can
+# act as a PXE installation server. An additional ethernet
+# interface is added using a PCIe NIC card installed
+# into the Host PC system.
+
+# a. Attach a second ethernet interface for PXE booting.
+#
+# On the host PC I changed the settings for an additional 
+# 'Intel(R) Gigabit ET Dual Port Server Adapter' card installed
+# using the control panel.
+#
+# 									Windows Key+R
+# Set 'Open :' to 					'control netconnections'
+# 									[OK]
+# Double Click on 					<required connection>
+# 									[Properties]
+# Double click on 					'Internet Protocol Version 4 (TCP/IPv4)'
+# Click on tab 						'Alternate Configuration'
+# Click on option 					'User configured'
+# In 'IP address' enter 			'10.0.0.2'
+# In 'Subnet mask' enter 			'255.255.255.0' 
+# In 'Default gateway enter			'10.0.0.1'
+# 									[OK]
+# 									[OK]
+# 									[Close]
+
+VBoxManage modifyvm dhcp --nic2 bridged --bridgeadapter2 "Intel(R) Gigabit ET Dual Port Server Adapter"
+
+# b. Start server and configure additional pxe ethernet interface
+
+VBoxManage startvm dhcp 				! If required.
+
+su -
+
+# b. Install TFTP, DCHCP, xinetd and syslinux software
+ 
+yum install -y tftp-server
+yum install -y dhcp
+yum install -y xinetd
+yum install -y syslinux
+
+# c. Confgure xinetd.
+
+vi /etc/xinetd.d/tftp
+
+Change: 'disable = yes' to 'disable = no'
+
+# d. Configure DHCP
+
+vi /etc/dhcp/dhcpd.conf					! This server will use an additonal NIC
+										! card installed on my host PC.
+Add:
+
+subnet 10.0.0.0 netmask 255.255.255.0 {
+	option routers 10.0.0.1 ;
+	range 10.0.0.5 10.0.0.16 ;
+	next-server 10.0.0.3;
+    filename "pxelinux/pxelinux.0";
+}
+
+# e. Configure PXE 
+
+# grep server_args /etc/xinted.d/tftp  ! to check the destination directory 
+#                                      ! for the pxelinix.0 file
+
+mkdir -p /var/lib/tftpboot/pxelinux/pxelinux.cfg
+mkdir /var/lib/tftpboot/pxelinux/images
+cp /usr/share/syslinux/pxelinux.0 /var/lib/tftpboot/pxelinux
+cp /boot/grub/splash.xpm.gz /var/lib/tftpboot/pxelinux
+
+vi /var/lib/tftpboot/pxelinux/pxelinux.cfg/http
+
+Add:
+
+default Linux  
+prompt 1  
+timeout 10  
+display boot.msg 
+ 
+label Linux         
+	menu label ^Install CentOS via HTTP            
+	menu default            
+	kernel images/vmlinuz             
+	append initrd=images/initrd.img ksdevice=bootif inst.ks=http://10.0.0.4/install/ks.cfg inst.repo=http://10.0.0.4/install
+
+
+vi /var/lib/tftpboot/pxelinux/pxelinux.cfg/nfs
+
+Add:
+
+default Linux  
+prompt 1  
+timeout 10  
+display boot.msg 
+
+label Linux
+    menu label ^Install CentOS via NFS
+	menu default
+    kernel images/vmlinuz
+    append initrd=images/initrd.img ksdevice=bootif inst.ks=nfs:10.0.0.4:/Installation/ks.cfg inst.repo=nfs:10.0.0.4:/Installation	
+
+cp '/run/media/user/CentOS 7 x86_64/images/pxeboot/vmlinuz' /var/lib/tftpboot/images
+cp '/run/media/user/CentOS 7 x86_64/images/pxeboot/initrd.img' /var/lib/tftpboot/images
+ln -s /var/lib/tftpboot/pxelinux/pxelinux.cfg/nfs /var/lib/tftpboot/pxelinux/pxelinux.cfg/default
+
+# f. Add host IP addresses to /etc/hosts
+
+echo "10.0.0.3 dhcp" >> /etc/hosts
+echo "10.0.0.4 web" >> /etc/hosts
+
+# g. Start services
+
+systemctl start xinetd
+systemctl enable xinetd
+systemctl start dhcpd
+systemctl enable dhcpd
+firewall-cmd --add-service=tftp --permanent
+firewall-cmd --reload
