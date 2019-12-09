@@ -1,4 +1,4 @@
-# virtualbox_centos_servers# virtualbox_centos_servers
+# virtualbox_centos_servers
 
 This repository details procedures for creating and configuring
 CentOS VirtualBox VM's. The procedures make use of the 
