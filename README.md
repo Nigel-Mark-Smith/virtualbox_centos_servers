@@ -25,6 +25,7 @@ To execute all process detailed requires that the following are true.
 See the following links for further details of obtaining this software:
 
 https://www.centos.org/
+
 https://www.virtualbox.org/
 
 It is also recommended that Putty is installed on the host PC
