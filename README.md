@@ -3,15 +3,15 @@
 This repository details procedures for creating and configuring
 CentOS VirtualBox VM's. The procedures make use of the 
 'VBoxManage' command line utility to create, manipulate and remove VM's
-and are intended to be exceuted in order detailed building a server
+and are intended to be exceuted in the order detailed below building a server
 network capable of supporting PXE installation. Where detailed the names
 of the DVD ISO image (CentOS-7-x86_64-Everything-1908.iso) and the 
 bridgeadapter<x> values ('Realtek PCIe GBE Family Controller' and
 'Intel(R) Gigabit ET Dual Port Server Adapter') should be replaced by
 the requisite values returned by the following on your host PC.
 
-'VBoxManage list --long dvds'
-'VBoxManage list --long bridgedifs'
+- 'VBoxManage list --long dvds'
+- 'VBoxManage list --long bridgedifs'
 
 To execute all process detailed requires that the following are true.
 
