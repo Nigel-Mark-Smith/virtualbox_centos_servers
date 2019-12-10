@@ -42,7 +42,7 @@ Create_an_installation_drive.txt|Creating a CentOS installation disk|2
 Create_an_installation_clone.txt|Creating a template CentOS VM|3
 Create_new_server.txt|Creating a new server (DHCP) using template VM|4
 Complete_DHCP_server_configuration.txt|Completing configuration of DHCP server|5
-Create_a_web_server.txt|Creatind a web server|6
+Create_a_web_server.txt|Creating a web server|6
 Create_new_server_using_PXE.txt|Creating a new server use PXE|7
 APPENDIX_A.txt|Template for removal of a VM|N/A
 APPENDIX_B.txt|Process for installing Guest Additions on VM|N/A
