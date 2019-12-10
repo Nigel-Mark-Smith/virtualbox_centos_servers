@@ -15,12 +15,12 @@ the requisite values returned by the following on your host PC.
 
 To execute all process detailed requires that the following are true.
 
-- Oracle VM VirtualBox is installed on the (Guest) PC.
+- Oracle VM VirtualBox is installed on the host PC.
 - A binary image of the CentOS DVD installation image (ISO) is 
   available in the Oracle VM VirtualBox installation.
 - Two physical NIC cards are installed on the host PC.
 - All VM's a defined in subfolders of X:\VM ( see
-  'VBoxManage setproperty machinefolder' ).
+  'VBoxManage setproperty machinefolder...' ).
 
 See the following links for further details of obtaining this software:
 
@@ -28,8 +28,8 @@ https://www.centos.org/
 
 https://www.virtualbox.org/
 
-It is also recommended that Putty is installed on the host PC
-this can be downloaded from the following link:
+It is also recommended that Putty is installed on the host PC.
+This can be downloaded from the following link:
 
 https://www.putty.org/
 
@@ -45,7 +45,7 @@ Complete_DHCP_server_configuration.txt|Completing configuration of DHCP server|4
 Create_a_web_server.txt|Creatind a web server|5
 Create_new_server_using_PXE.txt|Creating a new server use PXE|6
 APPENDIX_A.txt|Template for removal of a VM|N/A
-APPENDIX_B.txt|Process for install Guest Additions on VM|N/A
+APPENDIX_B.txt|Process for installing Guest Additions on VM|N/A
 
 
 
