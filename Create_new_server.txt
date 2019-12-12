@@ -39,7 +39,7 @@ of document 'Manual Installation of CentOS on a VirtualBox VM'
 
 su -
 hostnamectl set-hostname dhcp		! Set the hostname
-poweroff							! From command terminal	
+poweroff				! From command terminal	
 
 # d. Dismount DVD and Dismount and remove installation disk copy. 
 

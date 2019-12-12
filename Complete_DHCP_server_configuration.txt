@@ -113,7 +113,7 @@ ln -s /var/lib/tftpboot/pxelinux/pxelinux.cfg/nfs /var/lib/tftpboot/pxelinux/pxe
 nmcli con add con-name pxe ifname enp0s8 autoconnect yes type ethernet ip4 10.0.0.3/8 gw4 10.0.0.1
 nmcli con up pxe
 echo "10.0.0.3 dhcp.cleosmith.com" >> /etc/hosts
-echo "web.cleosmith.com web.cleosmith.com" >> /etc/hosts
+echo "10.0.0.4 web.cleosmith.com" >> /etc/hosts
 echo "10.0.0.5 ipa.cleosmith.com" >> /etc/hosts
 
 # g. Start services
