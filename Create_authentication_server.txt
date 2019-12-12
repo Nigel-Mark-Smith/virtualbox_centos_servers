@@ -1,0 +1,159 @@
+################################
+# Create Authentication server #
+################################
+
+# In this process a server will be set up that provides the following network
+# services:
+#
+# LDAP authetication
+# Network Time 
+# DNS
+#
+# Before starting this process you must ensure that the domain cleosmith.com 
+# is not registered by using the following command
+#
+# 'dig cleosmith.com'
+#
+# This process and previous processes configure a network using the second 'PXE' 
+# ethernet where the following IP addresses are used or available via DNS. 
+#
+# 
+# 10.0.0.3 dhcp.cleosmith.com
+# 10.0.0.4 web.cleosmith.com
+# 10.0.0.5 ipa.cleosmith.com
+# 10.0.0.6 reserved
+# 10.0.0.7 reserved
+# 10.0.0.8 reserved
+# 10.0.0.9
+# 10.0.0.10
+# 10.0.0.11
+# 10.0.0.12
+# 10.0.0.13
+# 10.0.0.14
+# 10.0.0.15
+# 10.0.0.16
+#
+# Further information about FreeIPA is available at:
+#
+# http://www.freeipa.org
+
+# a. Create VM
+
+VBoxManage setproperty machinefolder Y:\VM
+VBoxManage clonevm installation --mode all --name ipa --register
+VBoxManage modifyvm ipa --memory 2048
+VBoxManage createmedium disk --filename Y:\VM\ipa\root-disk1.vhd -size 20480 --format VHD
+VBoxManage storageattach ipa --storagectl SCSI --port 0 --type hdd --medium Y:\VM\ipa\root-disk1.vhd
+VBoxManage modifyvm ipa --boot1 disk --boot2 dvd --boot3 floppy --boot4 net
+VBoxManage modifyvm ipa --nic1 bridged --bridgeadapter1 "Intel(R) Gigabit ET Dual Port Server Adapter"
+VBoxManage startvm ipa
+
+
+# b. Initiate PXE installation
+
+[F12]		! To display boot device menu
+[l]		! to select LAN
+[enter]		! Installation should start uninterrupted and then run until s boot is required
+[Reboot]	
+
+# c. Complete installation
+
+Follow the installation steps detailed in section 'Complete Installation'
+of document 'Manual Installation of CentOS on a VirtualBox VM'
+
+su -
+hostnamectl set-hostname ipa.cleosmith.com		! Set the hostname
+
+# d. Disable SElinux
+
+setenforce 0
+vi /etc/sysconfig/selinux
+
+Change
+
+'SELINUX=enforcing' to 'SELINUX=disabled'
+
+poweroff
+
+# d. Add ethernet interface to enable accesss to repositories
+
+VBoxManage modifyvm ipa --nic1 bridged --bridgeadapter1 "Realtek PCIe GBE Family Controller"
+VBoxManage modifyvm ipa --nic2 bridged --bridgeadapter2 "Intel(R) Gigabit ET Dual Port Server Adapter"
+VBoxManage startvm ipa
+
+# e. Install IPA and FTP software
+
+su -
+yum -y install ipa-server bind-dyndb-ldap ipa-server-dns
+yum -y install vsftpd
+
+
+# f. Set up PXE ethernet interface
+
+nmcli con add con-name pxe ifname enp0s8 autoconnect yes type ethernet ip4 10.0.0.5/8 gw4 10.0.0.1
+nmcli con up pxe
+echo "10.0.0.3 dhcp.cleosmith.com" >> /etc/hosts
+echo "10.0.0.4 web.cleosmith.com" >> /etc/hosts
+echo "10.0.0.5 ipa.cleosmith.com" >> /etc/hosts
+reboot
+
+# h. Install IPA and DNS
+
+
+VBoxManage startvm ipa
+
+su -
+ipa-server-install --setup-dns
+
+Follow all steps as 
+for SERVICE in ntp http https ldap ldaps kerberos kpasswd dns; do firewall-cmd --permanent --add-service=$SERVICE; done
+firewall-cmd --reload
+
+kinit admin
+
+enter admin password
+
+klist
+
+# i. Make CA certificate available via ftp.
+
+systemctl enable vsftpd
+systemctl start vsftpd
+
+cp /etc/ipa/ca.crt /var/ftp/pub
+
+firewall-cmd --add-service=ftp --permanent
+firewall-cmd --reload
+
+# j. Create ldap users
+
+ipa user-add ldapuser1
+
+enter ldapuser1 as first and last name
+
+ipa user-add ldapuser2
+
+enter ldapuser2 as first and last name
+
+ipa user-add ldapuser3
+
+enter ldapuser3 as first and last name
+
+ipa user-add ldapuser4
+
+enter ldapuser4 as first and last name
+
+ipa user-add ldapuser5
+
+enter ldapuser5 as first and last name
+
+ipa user-add nigel
+
+enter nigel as first and last name
+
+# k. Add hosts entries in DNS
+
+ipa host-add --force --ip-address=10.0.0.3 dhcp.cleosmith.com
+ipa host-add --force --ip-address=10.0.0.4 web.cleosmith.com
+
+

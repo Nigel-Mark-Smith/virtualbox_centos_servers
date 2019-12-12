@@ -24,7 +24,7 @@ VBoxManage storageattach dhcp --storagectl SCSI --port 2 --type dvddrive --mediu
 VBoxManage startvm dhcp
 
 [F12]		! To display boot device menu
-[c]			! to select DVD
+[c]		! to select DVD
 Select 		'Install CentOS 7'
 [tab]		!Should show boot arguments
 Insert 		'inst.repo=hd:LABEL=OEMDRV' before 'inst.stage2=hd:LABEL=...'

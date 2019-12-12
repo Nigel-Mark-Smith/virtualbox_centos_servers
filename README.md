@@ -4,9 +4,9 @@ This repository details procedures for creating and configuring
 CentOS VirtualBox VM's. The procedures make use of the 
 'VBoxManage' command line utility to create, manipulate and remove VM's
 and are intended to be exceuted in the order detailed below building a server
-network capable of supporting PXE installation. Where detailed the names
-of the DVD ISO image (CentOS-7-x86_64-Everything-1908.iso) and the 
-bridgeadapter<x> values ('Realtek PCIe GBE Family Controller' and
+network capable of supporting PXE installation and LDAP authentication. 
+Where detailed the names of the DVD ISO image (CentOS-7-x86_64-Everything-1908.iso) 
+and the bridgeadapter<x> values ('Realtek PCIe GBE Family Controller' and
 'Intel(R) Gigabit ET Dual Port Server Adapter') should be replaced by
 the requisite values returned by the following on your host PC.
 
@@ -44,6 +44,7 @@ Create_new_server.txt|Creating a new server (DHCP) using template VM|4
 Complete_DHCP_server_configuration.txt|Completing configuration of DHCP server|5
 Create_a_web_server.txt|Creating a web server|6
 Create_new_server_using_PXE.txt|Creating a new server use PXE|7
+Create_authentication_server|Creating an LDAP authentication server|8
 APPENDIX_A.txt|Template for removal of a VM|N/A
 APPENDIX_B.txt|Process for installing Guest Additions on VM|N/A
 
