@@ -3,7 +3,7 @@
 ########################
 
 # In this process a new vm called 'dummy' is created. 
-# As a result of this process a kisckstart file anaconda-ks.cfg 
+# As a result of this process a kickstart file anaconda-ks.cfg 
 # is also generated which can be used subsequently to automate 
 # the installation of CentOS on other new VM's.
  
@@ -33,7 +33,7 @@ Select 		'Install CentOS 7'
 Follow the installation steps detailed in sections 'Enter Server Configuration Details'
 and 'Start Installation' of document 'Manual Installation of CentOS on a VirtualBox VM'
 
-[enter]		! Installation should start uninterrupted and then run until s boot is required
+[enter]		! Installation should start uninterrupted and then run until a boot is required
 [Reboot]	
 
 # c. Complete the installation process
