@@ -15,7 +15,6 @@
 VBoxManage createmedium disk --filename X:\VM\installation\installation-disk2.vhd -size 15360 --format VHD
 VBoxManage storageattach web --storagectl SCSI --port 1 --type hdd --medium X:\VM\installation\installation-disk2.vhd
 VBoxManage storageattach web --storagectl SCSI --port 2 --type hdd --medium X:\VM\installation\installation-disk1.vhd
-VBoxManage storageattach web --storagectl SCSI --port 3 --type dvddrive --medium X:\VM\CentOS-7-x86_64-Everything-1908.iso
 VBoxManage modifyvm web --nic2 bridged --bridgeadapter2 "Intel(R) Gigabit ET Dual Port Server Adapter"
 VBoxManage startvm web
 
@@ -37,22 +36,29 @@ y		! Confirm operation.
 
 
 mkfs.xfs /dev/sdb1
-mkdir -p /web
+mkdir /web
 echo "/dev/sdb1 /web xfs defaults 0 0" >> /etc/fstab
 mount -a
-chmod -R 777 /web
-cd /web
-mkdir install
-cd "/run/media/user/CentOS 7 x86_64"
-cp -R . /web/install				! This will take some time
 
-# e. Copy kickstart file to new installation disk
+mkdir /mnt/disk
+mkdir /mnt/install
 
-mount /dev/sdc1 /mnt
-cd /mnt
-cp ks.cfg /web/install
-cd /
-umount /mnt
+mount /dev/sdc1 /mnt/disk
+mount -o loop,ro -t iso9660 /mnt/disk/CentOS-7-x86_64-Everything-1908.iso /mnt/install
+cp -r /mnt/install /web   ! this may take some time
+
+umount /mnt/install
+umount /mnt/disk
+
+# e. Edit kickstart file on new installation disk ( references and installation cdrom ).
+
+vi /web/install/ks.cfg
+
+remove the following lines:
+
+	# Use CDROM installation media
+	cdrom
+
 
 # f. Install and configure web server
 
@@ -88,6 +94,7 @@ echo "/Installation *(rw)" >> /etc/exports
 # i. Set up PXE ethernet interface
 
 nmcli con add con-name pxe ifname enp0s8 autoconnect yes type ethernet ip4 10.0.0.4/8 gw4 10.0.0.1
+nmcli con mod pxe ipv4.dns '10.0.0.5'
 nmcli con up pxe
 echo "10.0.0.3 dhcp.cleosmith.com" >> /etc/hosts
 echo "10.0.0.4 web.cleosmith.com" >> /etc/hosts

@@ -1,0 +1,41 @@
+##################################
+# Create server 'test' using PXE #
+##################################
+
+# In this exmaple the 'dhcp' 'web' and ipa servers created by the processes
+# detailed in 'Create new server','Complete DHCP server configuration'
+# 'Create a web server' and 'Create Authentication server' are used to 
+# facilitate the installation of a new server 'test' using PXE (NFS).
+# This server should have IP address 10.0.0.15 asigned by the DHJCP server. 
+
+# a. Create a new server 
+
+VBoxManage setproperty machinefolder Y:\VM
+VBoxManage clonevm installation --options=keepallmacs --mode all --name test --register
+VBoxManage modifyvm test --memory 2048
+VBoxManage createmedium disk --filename Y:\VM\test\root-disk1.vhd -size 20480 --format VHD
+VBoxManage storageattach test --storagectl SCSI --port 0 --type hdd --medium Y:\VM\test\root-disk1.vhd
+VBoxManage modifyvm test --boot1 disk --boot2 dvd --boot3 floppy --boot4 net
+VBoxManage modifyvm test --nic1 bridged --bridgeadapter1 "Intel(R) Gigabit ET Dual Port Server Adapter"
+VBoxManage startvm test
+
+# b. Initiate PXE installation
+
+[F12]		! To display boot device menu
+[l]		! to select LAN
+[enter]		! Installation should start uninterrupted and then run until boot is required
+[Reboot]
+
+# c. Complete installation
+
+Follow the installation steps detailed in section 'Complete Installation'
+of document 'Manual Installation of CentOS on a VirtualBox VM'
+
+# d. Configure network
+
+hostnamectl set-hostname test.cleosmith.com
+nmcli con add con-name pxe ifname enp0s3 autoconnect yes type ethernet ip4 10.0.0.15/8 gw4 10.0.0.1
+nmcli con mod pxe ipv4.dns '10.0.0.5'
+nmcli con up pxe
+echo "10.0.0.15 test.cleosmith.com" >> /etc/hosts
+

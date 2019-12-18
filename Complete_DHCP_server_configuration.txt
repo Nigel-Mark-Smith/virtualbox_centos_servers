@@ -63,6 +63,11 @@ subnet 10.0.0.0 netmask 255.255.255.0 {
         filename "pxelinux/pxelinux.0";
 }
 
+host test {
+hardware ethernet 08:00:27:34:D2:5D;
+fixed-address 10.0.0.15;
+}
+
 # e. Configure PXE 
 
 # grep server_args /etc/xinted.d/tftp  ! to check the destination directory 
@@ -111,6 +116,7 @@ ln -s /var/lib/tftpboot/pxelinux/pxelinux.cfg/nfs /var/lib/tftpboot/pxelinux/pxe
 # f. Set up PXE ethernet interface
 
 nmcli con add con-name pxe ifname enp0s8 autoconnect yes type ethernet ip4 10.0.0.3/8 gw4 10.0.0.1
+nmcli con mod pxe ipv4.dns '10.0.0.5'
 nmcli con up pxe
 echo "10.0.0.3 dhcp.cleosmith.com" >> /etc/hosts
 echo "10.0.0.4 web.cleosmith.com" >> /etc/hosts

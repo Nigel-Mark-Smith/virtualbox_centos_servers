@@ -45,6 +45,7 @@ Complete_DHCP_server_configuration.txt|Completing configuration of DHCP server|5
 Create_a_web_server.txt|Creating a web server|6
 Create_new_server_using_PXE.txt|Creating a new server use PXE|7
 Create_authentication_server|Creating an LDAP authentication server|8
+Create_server_test_using_PXE|Creating a new server with a fixed IP address using PXE|9
 APPENDIX_A.txt|Template for removal of a VM|N/A
 APPENDIX_B.txt|Process for installing Guest Additions on VM|N/A
 
