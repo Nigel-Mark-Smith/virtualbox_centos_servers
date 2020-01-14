@@ -2,9 +2,9 @@
 # Create iSCSI initiator server #
 #################################
 
-# In this exmaple the a new server is created which
+# In this exmaple a new server is created which
 # utilizes the iSCSI backend storage available following
-# the completion of process "Create iSCSI target server"
+# the completion of process "Create iSCSI target server".
 
 # a. Create a new server 
 
@@ -15,7 +15,7 @@ VBoxManage modifyvm scsi2 --boot1 disk --boot2 dvd --boot3 floppy --boot4 net
 VBoxManage modifyvm scsi2 --nic1 bridged --bridgeadapter1 "Intel(R) Gigabit ET Dual Port Server Adapter"
 VBoxManage startvm scsi2
 
-# b. 
+# b. Start installation
 
 [F12]		! To display boot device menu
 [l]		! to select LAN
@@ -29,39 +29,39 @@ of document 'Manual Installation of CentOS on a VirtualBox VM'
 
 su -
 hostnamectl set-hostname scsi2		! Set the hostname
-shutdown -h now --no-wall               ! From command terminal
+shutdown -h now                         ! From command terminal
+
+# d. Configure and activate second ethernet interface
 
 VBoxManage modifyvm scsi2 --nic1 bridged --bridgeadapter1 "Realtek PCIe GBE Family Controller"
 VBoxManage modifyvm scsi2 --nic2 bridged --bridgeadapter2 "Intel(R) Gigabit ET Dual Port Server Adapter"
 VBoxManage startvm scsi2
-
 
 nmcli con add con-name pxe ifname enp0s8 autoconnect yes type ethernet ip4 10.0.0.14/8 gw4 10.0.0.1
 nmcli con mod pxe ipv4.dns '10.0.0.5'
 nmcli con up pxe
 shutdown -r now
 
-# d. Install iSCSI software and set initiator id
+# e. Install iSCSI software and set initiator id
 
 yum -y install iscsi-initiator-utils
 echo InitiatorName=iqn.2020-01.com.cleosmith:scsi1 > /etc/iscsi/initiatorname.iscsi
 systemctl restart iscsid
 
 
-# e. Connect iSCSI backend storage.
-
+# f. Connect iSCSI backend storage.
 
 iscsiadm --mode discovery --type sendtargets --portal 10.0.0.13 --discover
 iscsiadm --mode node --targetname iqn.2020-01.com.cleosmith:target --portal 10.0.0.13 --login
 
-# f. Create file systems on the iSCSI disks
+# g. Create file systems on the iSCSI disks
 
 mkfs.xfs /dev/sdb
 mkfs.xfs /dev/sdc
 mkfs.xfs /dev/sdd
 
 
-# g. Ensure iSCSI disk is mounted after restart.
+# h. Ensure iSCSI disk is mounted after restart.
 
 
 mkdir /mnt/scsi1_test1

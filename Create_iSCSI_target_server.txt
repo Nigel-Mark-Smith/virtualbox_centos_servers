@@ -3,7 +3,7 @@
 ##############################
 
 # In this exmaple the a new server is created which
-# provides iSCSI backen storage. This storage is used
+# provides iSCSI backend storage. This storage is used
 # by the server created in process 'Create iSCSi initiator
 # server"
 
@@ -18,7 +18,7 @@ VBoxManage modifyvm scsi1 --boot1 disk --boot2 dvd --boot3 floppy --boot4 net
 VBoxManage modifyvm scsi1 --nic1 bridged --bridgeadapter1 "Intel(R) Gigabit ET Dual Port Server Adapter"
 VBoxManage startvm scsi1
 
-# b. 
+# b. Start installation
 
 [F12]		! To display boot device menu
 [l]		! to select LAN
@@ -34,6 +34,7 @@ su -
 hostnamectl set-hostname scsi1		! Set the hostname
 shutdown -h now				! From command terminal
 
+# d. Configure and activate second ethernet interface
 
 VBoxManage modifyvm scsi1 --nic1 bridged --bridgeadapter1 "Realtek PCIe GBE Family Controller"
 VBoxManage modifyvm scsi1 --nic2 bridged --bridgeadapter2 "Intel(R) Gigabit ET Dual Port Server Adapter"
@@ -44,7 +45,7 @@ nmcli con mod pxe ipv4.dns '10.0.0.5'
 nmcli con up pxe
 shutdown -r now
 
-# d. Create LVM.
+# e. Create LVM.
 
  fdisk /dev/sdb
 disk /dev/sdb
@@ -63,11 +64,11 @@ vgcreate vgsan /dev/sdb1
 lvcreate -L 150M -n lvsan1 /dev/vgsan
 lvcreate -L 150M -n lvsan2 /dev/vgsan
 
-# e. Install iscsi software
+# f. Install iscsi software
 
 yum -y install targetcli
 
-# f. Configure iSCSI backend storage
+# g. Configure iSCSI backend storage
 #    This includes creatin the TPG and target IQN
 
 
@@ -91,7 +92,7 @@ exit
 cat /etc/iscsi/initiatorname.iscsi		! The contents of this file on the 
 						! initiator must be the same as this
 
-# g. Enable service and open required port.
+# h. Enable service and open required port.
 
 systemctl enable --now target
 firewall-cmd --add-port=3260/tcp --permanent
