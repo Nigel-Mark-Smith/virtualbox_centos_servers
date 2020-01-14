@@ -63,4 +63,4 @@ umount /Installation
 
 # g. Close dummy VM
 
-poweroff
+shutdown -h now

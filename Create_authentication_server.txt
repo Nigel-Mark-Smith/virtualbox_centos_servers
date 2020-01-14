@@ -17,20 +17,20 @@
 # This process and previous processes configure a network using the second 'PXE' 
 # ethernet where the following IP addresses are used or available via DNS. 
 #
-# 
+#  
 # 10.0.0.3 dhcp.cleosmith.com
 # 10.0.0.4 web.cleosmith.com
 # 10.0.0.5 ipa.cleosmith.com
 # 10.0.0.6 reserved
-# 10.0.0.7 reserved
-# 10.0.0.8 reserved
+# 10.0.0.7 Host PC extra ethernet interface 1
+# 10.0.0.8 Host PC extra ethernet interface 2
 # 10.0.0.9
 # 10.0.0.10
 # 10.0.0.11
 # 10.0.0.12
-# 10.0.0.13
-# 10.0.0.14 test.cleosmith.com
-# 10.0.0.15
+# 10.0.0.13 scsi1.cleosmith.com
+# 10.0.0.14 scsi2.cleosmith.com
+# 10.0.0.15 test.cleosmith.com
 # 10.0.0.16
 #
 # Further information about FreeIPA is available at:
@@ -73,7 +73,7 @@ Change
 
 'SELINUX=enforcing' to 'SELINUX=disabled'
 
-poweroff
+shutdown -h now
 
 # d. Add ethernet interface to enable accesss to repositories
 
@@ -96,7 +96,7 @@ nmcli con up pxe
 echo "10.0.0.3 dhcp.cleosmith.com" >> /etc/hosts
 echo "10.0.0.4 web.cleosmith.com" >> /etc/hosts
 echo "10.0.0.5 ipa.cleosmith.com" >> /etc/hosts
-reboot
+shutdown -r now
 
 # h. Install IPA and DNS
 
@@ -156,6 +156,8 @@ enter nigel as first and last name
 
 ipa host-add --force --ip-address=10.0.0.3 dhcp.cleosmith.com
 ipa host-add --force --ip-address=10.0.0.4 web.cleosmith.com
+ipa host-add --force --ip-address=10.0.0.13 scsi1.cleosmith.com
+ipa host-add --force --ip-address=10.0.0.14 scsi2.cleosmith.com
 ipa host-add --force --ip-address=10.0.0.15 test.cleosmith.com
 
 

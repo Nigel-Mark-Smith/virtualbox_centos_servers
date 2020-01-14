@@ -43,4 +43,4 @@ of document 'Manual Installation of CentOS on a VirtualBox VM'
 
 su -
 hostnamectl set-hostname dummy		! Set the hostname
-poweroff							! From command terminal	
+shutdown -h now				! From command terminal	

@@ -8,7 +8,7 @@
 # interface is added using a PCIe NIC card installed
 # into the Host PC system.
 
-# a. Attach a second ethernet interface for PXE booting.
+# a. Attach a second dual ethernet interface for PXE booting.
 #
 # On the host PC I changed the settings for an additional 
 # 'Intel(R) Gigabit ET Dual Port Server Adapter' card installed
@@ -17,17 +17,28 @@
 # 						Windows Key+R
 # Set 'Open :' to 				'control netconnections'
 # 						[OK]
-# Double Click on 				<required connection>
-# 						[Properties]
+# Double Click on 				<first connection>
+# Click						'Properties'
 # Double click on 				'Internet Protocol Version 4 (TCP/IPv4)'
-# Click on tab 					'Alternate Configuration'
-# Click on option 				'User configured'
-# In 'IP address' enter 			'10.0.0.2'
-# In 'Subnet mask' enter 			'255.255.255.0' 
-# In 'Default gateway enter			'10.0.0.1'
-# 						[OK]
-# 						[OK]
-# 						[Close]
+# In 'General' tab click			'Use the following IP address'
+# For 'IP address:' enter			'10.0.0.7'
+# For 'Subnet mask:' enter			'255.255.255.0'
+# For 'Default gateway:' enter			'10.0.0.1'
+# Click						'OK' 			Ignore any error messages
+# Click						'OK' 			Ignore any error messages
+# Click						'Close' 		Ignore any error messages
+# Double Click on 				<second connection>
+# Click						'Properties'
+# Double click on 				'Internet Protocol Version 4 (TCP/IPv4)'
+# In 'General' tab click			'Use the following IP address'
+# For 'IP address:' enter			'10.0.0.8'
+# For 'Subnet mask:' enter			'255.255.255.0'
+# For 'Default gateway:' enter			'10.0.0.1'
+# Click						'OK' 			Ignore any error messages
+# Click						'OK' 			Ignore any error messages
+# Click						'Close' 		Ignore any error messages
+
+		
 
 VBoxManage modifyvm dhcp --nic2 bridged --bridgeadapter2 "Intel(R) Gigabit ET Dual Port Server Adapter"
 
@@ -66,6 +77,16 @@ subnet 10.0.0.0 netmask 255.255.255.0 {
 host test {
 hardware ethernet 08:00:27:34:D2:5D;
 fixed-address 10.0.0.15;
+}
+
+host scsi1 {
+hardware ethernet  08:00:27:B0:64:94;
+fixed-address 10.0.0.13;
+}
+
+host scsi2 {
+hardware ethernet  08:00:27:AB:D5:10;
+fixed-address 10.0.0.14;
 }
 
 # e. Configure PXE 

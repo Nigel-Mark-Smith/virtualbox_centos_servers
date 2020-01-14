@@ -14,6 +14,7 @@ VBoxManage clonevm installation --mode all --name dhcp --register
 VBoxManage createmedium disk --filename X:\VM\dhcp\root-disk1.vhd -size 20480 --format VHD
 VBoxManage storageattach dhcp --storagectl SCSI --port 0 --type hdd --medium X:\VM\dhcp\root-disk1.vhd
 VBoxManage storageattach dhcp --storagectl SCSI --port 2 --type dvddrive --medium X:\VM\CentOS-7-x86_64-Everything-1908.iso
+VBoxManage modifyvm dhcp --boot1 disk --boot2 dvd --boot3 floppy --boot4 net
 
 # b. Start kickstart installation manually
 #
@@ -30,7 +31,7 @@ Select 		'Install CentOS 7'
 Insert 		'inst.repo=hd:LABEL=OEMDRV' before 'inst.stage2=hd:LABEL=...'
 Change 		'inst.stage2=hd:LABEL=...' to 'inst.stage2=hd:LABEL=OEMDRV'
 [enter]		! Installation should start uninterrupted and then run until s boot is required
-[Reboot]	! This does not seem to work properly
+[Reboot]	
 
 # c. Complete installation
 
@@ -39,7 +40,7 @@ of document 'Manual Installation of CentOS on a VirtualBox VM'
 
 su -
 hostnamectl set-hostname dhcp		! Set the hostname
-poweroff				! From command terminal	
+shutdown -h now				! From command terminal	
 
 # d. Dismount DVD and Dismount and remove installation disk copy. 
 

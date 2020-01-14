@@ -6,7 +6,7 @@
 # detailed in 'Create new server','Complete DHCP server configuration'
 # 'Create a web server' and 'Create Authentication server' are used to 
 # facilitate the installation of a new server 'test' using PXE (NFS).
-# This server should have IP address 10.0.0.15 asigned by the DHJCP server. 
+# This server should have IP address 10.0.0.15 asigned by the DHCP server. 
 
 # a. Create a new server 
 

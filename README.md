@@ -19,7 +19,7 @@ To execute all process detailed requires that the following are true.
 - A binary image of the CentOS DVD installation image (ISO) is 
   available in the Oracle VM VirtualBox installation.
 - Two physical NIC cards are installed on the host PC.
-- All VM's a defined in subfolders of X:\VM ( see
+- All VM's can be defined in subfolders of X:\VM or Y:\VM ( see
   'VBoxManage setproperty machinefolder...' ).
 
 See the following links for further details of obtaining this software:
@@ -46,6 +46,8 @@ Create_a_web_server.txt|Creating a web server|6
 Create_new_server_using_PXE.txt|Creating a new server use PXE|7
 Create_authentication_server|Creating an LDAP authentication server|8
 Create_server_test_using_PXE|Creating a new server with a fixed IP address using PXE|9
+Create_iSCSI_target_server|Creating a new server which provides iSCSI backend storage|10
+Create_iSCSI_initiator_server|Creating a new server which utilises iSCSI backend storage|11
 APPENDIX_A.txt|Template for removal of a VM|N/A
 APPENDIX_B.txt|Process for installing Guest Additions on VM|N/A
 
