@@ -150,6 +150,13 @@ enter ldapuser5 as first and last name
 
 ipa user-add nigel
 
+ipa passwd ldapuser1 password
+ipa passwd ldapuser2 password
+ipa passwd ldapuser3 password
+ipa passwd ldapuser4 password
+ipa passwd ldapuser5 password
+ipa passwd nigel password
+
 enter nigel as first and last name
 
 # k. Add hosts entries in DNS
