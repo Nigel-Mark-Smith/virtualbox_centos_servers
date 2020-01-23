@@ -47,7 +47,7 @@ shutdown -r now
 
 # e. Create LVM.
 
- fdisk /dev/sdb
+fdisk /dev/sdb
 disk /dev/sdb
 n		! New partition ( all disk )
 p
@@ -69,7 +69,7 @@ lvcreate -L 150M -n lvsan2 /dev/vgsan
 yum -y install targetcli
 
 # g. Configure iSCSI backend storage
-#    This includes creatin the TPG and target IQN
+#    This includes creating the TPG and target IQN
 
 
 targetcli

@@ -64,14 +64,33 @@ remove the following lines:
 
 yum groups install -y "Basic Web Server"
 
-ln -s /web/install /var/www/html/install
-setenforce 0
+vi /etc/httpd/conf/httpd.conf
 
-vi /etc/sysconfig/selinux
+Change 
 
-Change
+DocumentRoot "/var/www/html/"
 
-'SELINUX=enforcing' to 'SELINUX=disabled'
+To
+
+DocumentRoot "/web"
+
+Add
+
+<Directory "/web">
+  AllowOverride None
+  Require all granted
+</Directory>
+
+<Directory "/web/install">
+    Options Indexes FollowSymLinks
+    AllowOverride None
+    Require all granted
+</Directory>
+
+
+semanage fcontext -a -t httpd_sys_content_t "/web(/.*)?"
+restorecon  -R -v /web
+
 
 # g. Start web server and make web services available
 
@@ -108,5 +127,3 @@ firewall-cmd --add-service=nfs --permanent
 firewall-cmd --add-service rpc-bind --permanent
 firewall-cmd --add-service mountd --permanent
 firewall-cmd --reload
-
-# k. Remove installation 
