@@ -44,7 +44,7 @@ Create_an_installation_clone.txt|Creating a template CentOS VM|3
 Create_new_server.txt|Creating a new server (DHCP) using template VM|4
 Complete_DHCP_server_configuration.txt|Completing configuration of DHCP server|5
 Create_a_web_server.txt|Creating a web server|6
-Create_new_server_using_PXE.txt|Creating a new server use PXE|7
+Create_new_server_using_PXE.txt|Creating a new server using PXE|7
 Create_authentication_server|Creating an LDAP authentication server|8
 Create_server_test_using_PXE|Creating a new server with a fixed IP address using PXE|9
 Create_iSCSI_target_server|Creating a new server which provides iSCSI backend storage|10

@@ -3,8 +3,8 @@
 ##############
 
 This appendix provides a generic procedure for installing the VirtualBox additions on
-a VM. In this instanec the VM used is the 'dummy' VM created in process 'Create dummy server'
-Guest additions should operations like cut and paste between Host and Guset VM's. See link
+a VM. In this instance the VM used is the 'dummy' VM created in process 'Create dummy server'
+Guest additions should allow operations like cut and paste between Host and Guset VM's. See link
 below for furthe details.
 
 # a. Mount the ISO image containg the guest additions.
