@@ -1,0 +1,80 @@
+########################
+# Create router server #
+########################
+
+# In this exmaple a router server is created. The firewall rules are
+# configured to allow:
+#
+# - Access for the pxe network to the internet via masquerading ( NAT )
+# - Access to the web services configured on the web server via port
+#   forwading through the router.
+
+# a. Create a new server 
+
+VBoxManage clonevm installation --mode all --name router --register
+VBoxManage createmedium disk --filename Y:\VM\router\root-disk1.vhd -size 20480 --format VHD
+VBoxManage storageattach router --storagectl SCSI --port 0 --type hdd --medium Y:\VM\router\root-disk1.vhd
+VBoxManage modifyvm router --boot1 disk --boot2 dvd --boot3 floppy --boot4 net
+VBoxManage modifyvm router --nic1 bridged --bridgeadapter1 "Intel(R) Gigabit ET Dual Port Server Adapter"
+VBoxManage startvm router
+
+# b. Start installation
+
+[F12]		! To display boot device menu
+[l]		! to select LAN
+[enter]		! Installation should start uninterrupted and then run until s boot is required
+[Reboot]	
+
+# c. Complete installation
+
+Follow the installation steps detailed in section 'Complete Installation'
+of document 'Manual Installation of CentOS on a VirtualBox VM'
+
+su -
+hostnamectl set-hostname router.cleosmith.com	! Set the hostname
+shutdown -h now					! From command terminal
+
+# d. Configure and activate second ethernet interface
+
+VBoxManage modifyvm router --nic1 bridged --bridgeadapter1 "Realtek PCIe GBE Family Controller"
+VBoxManage modifyvm router --nic2 bridged --bridgeadapter2 "Intel(R) Gigabit ET Dual Port Server Adapter"
+VBoxManage startvm router
+
+nmcli con add con-name pxe ifname enp0s8 autoconnect yes type ethernet ip4 10.0.0.1/8 
+nmcli con mod pxe ipv4.dns '10.0.0.5'
+nmcli con up pxe
+shutdown -r now
+
+# e. Make this server a router.
+
+echo 1 > /proc/sys/net/ipv4/ip_forward
+echo net.ipv4.ip_forward = 1 > /etc/sysctl.d/router.conf
+
+# f. Add /etc/host entries.
+
+echo "10.0.0.1 router.cleosmith.com" >> /etc/hosts
+echo "10.0.0.3 dhcp.cleosmith.com" >> /etc/hosts
+echo "10.0.0.4 web.cleosmith.com account.cleosmith.com sales.cleosmith.com" >> /etc/hosts
+echo "10.0.0.5 ipa.cleosmith.com" >> /etc/hosts
+
+# g. Set up NAT masquerading.
+
+firewall-cmd --remove-interface=enp0s3  --permanent
+firewall-cmd --add-interface=enp0s3  --zone=dmz --permanent
+firewall-cmd --add-masquerade --zone=dmz --permanent
+firewall-cmd --reload
+
+# h. Set up port forwarding for web services configured on web.cleosmith.com
+
+firewall-cmd --add-masquerade --zone=public --permanent 
+firewall-cmd --zone=dmz --add-forward-port port=80:proto=tcp:toport=80:toaddr=10.0.0.4 --permanent
+firewall-cmd --zone=dmz --add-forward-port port=443:proto=tcp:toport=443:toaddr=10.0.0.4 --permanent
+firewall-cmd --reload
+
+
+
+
+
+
+
+

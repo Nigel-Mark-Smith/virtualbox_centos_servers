@@ -16,6 +16,8 @@ VBoxManage createmedium disk --filename X:\VM\installation\installation-disk2.vh
 VBoxManage storageattach web --storagectl SCSI --port 1 --type hdd --medium X:\VM\installation\installation-disk2.vhd
 VBoxManage storageattach web --storagectl SCSI --port 2 --type hdd --medium X:\VM\installation\installation-disk1.vhd
 VBoxManage modifyvm web --nic2 bridged --bridgeadapter2 "Intel(R) Gigabit ET Dual Port Server Adapter"
+VBoxManage modifyvm web --nic3 bridged --bridgeadapter3 "Intel(R) Gigabit ET Dual Port Server Adapter"
+VBoxManage modifyvm web --nic4 bridged --bridgeadapter4 "Intel(R) Gigabit ET Dual Port Server Adapter"
 VBoxManage startvm web
 
 # c. Configue and activate PXE ethernet interface
@@ -66,6 +68,11 @@ yum groups install -y "Basic Web Server"
 
 vi /etc/httpd/conf/httpd.conf
 
+Add
+
+Listen 10.0.0.4:80
+Listen 10.0.0.4:443 https
+
 Change 
 
 DocumentRoot "/var/www/html/"
@@ -81,12 +88,45 @@ Add
   Require all granted
 </Directory>
 
+<Directory "/web/docs">
+    Options Indexes FollowSymLinks
+    AllowOverride None
+    Require all granted
+</Directory>
+
 <Directory "/web/install">
     Options Indexes FollowSymLinks
     AllowOverride None
     Require all granted
 </Directory>
 
+vi /etc/httpd/conf.d/account.cleosmith.com.conf
+
+<VirtualHost *:80>
+	DocumentRoot /web/docs/account.cleosmith.com
+	ServerName account.cleosmith.com
+	ErrorLog logs/account.cleosmith.com-error_log
+        CustomLog logs/account.cleosmith.com-access_log common
+</VirtualHost>
+
+mkdir -p /web/docs/account.cleosmith.com
+
+vi /etc/httpd/conf.d/sales.cleosmith.com.conf
+
+<VirtualHost *:80>
+	DocumentRoot /web/docs/sales.cleosmith.com
+	ServerName sales.cleosmith.com
+	ErrorLog logs/sales.cleosmith.com-error_log
+        CustomLog logs/sales.cleosmith.com-access_log common
+</VirtualHost>
+
+mkdir -p /web/docs/sales.cleosmith.com
+
+vi /etc/httpd/conf.d/default.conf
+
+<VirtualHost _default_:80>
+        DocumentRoot /web
+</VirtualHost>
 
 semanage fcontext -a -t httpd_sys_content_t "/web(/.*)?"
 restorecon  -R -v /web
@@ -99,24 +139,27 @@ systemctl enable httpd
 firewall-cmd --add-service=http --permanent
 firewall-cmd --reload
 
-# h. Install and configure nfs
+# h. Install nfs and configure nfs export directories.
 
 yum install -y nfs-utils
 
 mkdir /Installation
+semanage fcontext -a -t nfs_t "/Installation(/.*)?"
+restorecon -Rv /Installation
 chmod 777 /Installation
 echo "/dev/sdc1 /Installation xfs defaults 0 0" >> /etc/fstab
 mount -a
 
-echo "/Installation *(rw)" >> /etc/exports
+echo "/Installation *(ro)" >> /etc/exports
 
 # i. Set up PXE ethernet interface
 
 nmcli con add con-name pxe ifname enp0s8 autoconnect yes type ethernet ip4 10.0.0.4/8 gw4 10.0.0.1
 nmcli con mod pxe ipv4.dns '10.0.0.5'
 nmcli con up pxe
+echo "10.0.0.1 router.cleosmith.com" >> /etc/hosts
 echo "10.0.0.3 dhcp.cleosmith.com" >> /etc/hosts
-echo "10.0.0.4 web.cleosmith.com" >> /etc/hosts
+echo "10.0.0.4 web.cleosmith.com account.cleosmith.com sales.cleosmith.com" >> /etc/hosts
 echo "10.0.0.5 ipa.cleosmith.com" >> /etc/hosts
 
 # j .Start nfs services and add required services to firewall-cmd

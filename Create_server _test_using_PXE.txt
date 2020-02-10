@@ -37,5 +37,6 @@ hostnamectl set-hostname test.cleosmith.com
 nmcli con add con-name pxe ifname enp0s3 autoconnect yes type ethernet ip4 10.0.0.15/8 gw4 10.0.0.1
 nmcli con mod pxe ipv4.dns '10.0.0.5'
 nmcli con up pxe
-echo "10.0.0.15 test.cleosmith.com" >> /etc/hosts
+shutdown -r now
+
 

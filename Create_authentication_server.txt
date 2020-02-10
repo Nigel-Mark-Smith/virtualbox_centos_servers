@@ -17,17 +17,18 @@
 # This process and previous processes configure a network using the second 'PXE' 
 # ethernet where the following IP addresses are used or available via DNS. 
 #
-#  
+# 10.0.0.1 
+# 10.0.0.2 
 # 10.0.0.3 dhcp.cleosmith.com
-# 10.0.0.4 web.cleosmith.com
+# 10.0.0.4 web.cleosmith.com account.cleosmith.com sales.cleosmith.com
 # 10.0.0.5 ipa.cleosmith.com
-# 10.0.0.6 reserved
+# 10.0.0.6 
 # 10.0.0.7 Host PC extra ethernet interface 1
 # 10.0.0.8 Host PC extra ethernet interface 2
-# 10.0.0.9
-# 10.0.0.10
-# 10.0.0.11
-# 10.0.0.12
+# 10.0.0.9 
+# 10.0.0.10 
+# 10.0.0.11 server1.cleosmith.com
+# 10.0.0.12 server2.cleosmith.com
 # 10.0.0.13 scsi1.cleosmith.com
 # 10.0.0.14 scsi2.cleosmith.com
 # 10.0.0.15 test.cleosmith.com
@@ -94,7 +95,7 @@ nmcli con add con-name pxe ifname enp0s8 autoconnect yes type ethernet ip4 10.0.
 nmcli con mod pxe ipv4.dns '10.0.0.5'
 nmcli con up pxe
 echo "10.0.0.3 dhcp.cleosmith.com" >> /etc/hosts
-echo "10.0.0.4 web.cleosmith.com" >> /etc/hosts
+echo "10.0.0.4 web.cleosmith.com account.cleosmith.com sales.cleosmith.com" >> /etc/hosts
 echo "10.0.0.5 ipa.cleosmith.com" >> /etc/hosts
 shutdown -r now
 
@@ -161,10 +162,13 @@ enter nigel as first and last name
 
 # k. Add hosts entries in DNS
 
+ipa host-add --force --ip-address=10.0.0.1 router.cleosmith.com
 ipa host-add --force --ip-address=10.0.0.3 dhcp.cleosmith.com
 ipa host-add --force --ip-address=10.0.0.4 web.cleosmith.com
 ipa host-add --force --ip-address=10.0.0.13 scsi1.cleosmith.com
 ipa host-add --force --ip-address=10.0.0.14 scsi2.cleosmith.com
 ipa host-add --force --ip-address=10.0.0.15 test.cleosmith.com
+ipa host-add --force --ip-address=10.0.0.11 server1.cleosmith.com
+ipa host-add --force --ip-address=10.0.0.12 server2.cleosmith.com
 
 

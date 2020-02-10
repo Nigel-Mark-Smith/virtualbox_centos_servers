@@ -1,0 +1,45 @@
+Setting up SSH server on PC
+===========================
+
+The following procedure details the steps required to enable
+and start an OpenSSH server on a windows 10 PC. I have added
+steps 3. and 4. which may be necessary for some users and on
+some computers.  
+
+1. Install additional feature OpenSSH server.
+
+   Navigate to            	Settings->Apps->Manage optional features->Add a feature
+   Double click on 		OpenSSH Server
+
+   Once installation is complete reboot the PC.
+
+
+2. Configure sshd and ssh-agent services to start automatically.
+
+   Navigate to			Computer Management->Services and Applications->Services
+   Right click on 		OpenSSH Authenticaton Agent
+   Click on 			Properties
+   Change Startup Type to	Automantic
+   Click on			Apply
+   Right click on 		OpenSSH SSH Server
+   Click on 			Properties
+   Change Startup Type to	Automantic
+   Click on			Apply
+
+   Reboot PC
+
+
+3. Change local account to administrator
+
+   Navigate to 			Control Panel->User Accounts->Change account type
+   Click on			<User account name>
+   Click on 			Change the account type
+   Select			Administrator
+   Click on			Change Account Type				
+
+4. Enable ssh port in 3rd party virus protection firewall.
+
+   Where 3rd party virus protection is in use enable access to port 22 in the virus
+   protection software's firewall configuration.
+
+   

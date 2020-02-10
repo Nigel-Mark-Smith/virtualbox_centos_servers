@@ -49,6 +49,7 @@ Create_authentication_server|Creating an LDAP authentication server|8
 Create_server_test_using_PXE|Creating a new server with a fixed IP address using PXE|9
 Create_iSCSI_target_server|Creating a new server which provides iSCSI backend storage|10
 Create_iSCSI_initiator_server|Creating a new server which utilises iSCSI backend storage|11
+Create_router_server|Creating a new server which utilises iSCSI backend storage|12
 APPENDIX_A.txt|Template for removal of a VM|N/A
 APPENDIX_B.txt|Process for installing Guest Additions on VM|N/A
 

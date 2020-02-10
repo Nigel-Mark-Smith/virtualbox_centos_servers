@@ -5,7 +5,8 @@
 # In this exmaple the a new server is created which
 # provides iSCSI backend storage. This storage is used
 # by the server created in process 'Create iSCSi initiator
-# server"
+# server". The server is configured with a teamed interface
+# to increase robustness.
 
 # a. Create a new server 
 
@@ -34,15 +35,27 @@ su -
 hostnamectl set-hostname scsi1		! Set the hostname
 shutdown -h now				! From command terminal
 
-# d. Configure and activate second ethernet interface
+# d. Configure and activate teamed ethernet interface using enp0s8 and enp0s9.
 
 VBoxManage modifyvm scsi1 --nic1 bridged --bridgeadapter1 "Realtek PCIe GBE Family Controller"
 VBoxManage modifyvm scsi1 --nic2 bridged --bridgeadapter2 "Intel(R) Gigabit ET Dual Port Server Adapter"
+VBoxManage modifyvm scsi1 --nic3 bridged --bridgeadapter3 "Intel(R) Gigabit ET Dual Port Server Adapter"
+VBoxManage showvminfo scsi1 | findstr /C:"MAC:"  ! Note the MAC address for NIC 2
+VBoxManage modifyvm scsi1 --macaddress3 080027f073e1 ! Set the MAC address to the one determined above.
 VBoxManage startvm scsi1
 
-nmcli con add con-name pxe ifname enp0s8 autoconnect yes type ethernet ip4 10.0.0.13/8 gw4 10.0.0.1
-nmcli con mod pxe ipv4.dns '10.0.0.5'
+nmcli con add type team con-name pxe config '{"runner":{"name":"activebackup"}}'
+nmcli con mod pxe ipv4.method manual ipv4.addresses 10.0.0.13/8 ipv4.gateway 10.0.0.1 ipv4.dns '10.0.0.5' 
+nmcli con add type team-slave ifname enp0s8 master pxe
+nmcli con mod team-slave-enp0s8 autoconnect yes 
+nmcli con add type team-slave ifname enp0s9 master pxe
+nmcli con mod team-slave-enp0s9 autoconnect yes
 nmcli con up pxe
+nmcli con up team-slave-enp0s8
+nmcli con up team-slave-enp0s9
+ip link set enp0s8 up
+ip link set enp0s9 up
+
 shutdown -r now
 
 # e. Create LVM.
