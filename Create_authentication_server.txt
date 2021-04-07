@@ -106,8 +106,8 @@ VBoxManage startvm ipa
 
 su -
 ipa-server-install --setup-dns
+Follow all steps as detailed in 'Installation of FreeIPA VirtualBox VM.docx'
 
-Follow all steps as 
 for SERVICE in ntp http https ldap ldaps kerberos kpasswd dns; do firewall-cmd --permanent --add-service=$SERVICE; done
 firewall-cmd --reload
 

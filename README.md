@@ -14,7 +14,7 @@ the following on your host PC.
 - 'VBoxManage list --long dvds'
 - 'VBoxManage list --long bridgedifs'
 
-To execute all process detailed requires that the following are true.
+To execute all processes detailed requires that the following are true.
 
 - Oracle VM VirtualBox is installed on the host PC.
 - A binary image of the CentOS DVD installation image (ISO) is 
@@ -38,6 +38,7 @@ https://www.putty.org/
 Document File|File Contents|Execution order
 -------------|-------------|---------------
 Manual_Installation_of_CentOS_on_a_VirtualBox_VM.docx|Steps for installing CentOS manually on VM|N/A
+Installation_of_FreeIPA_VirtualBox_VM.docx|Steps for installing FreeIPA software using script 'ipa-server-install'|N/A
 Create_dummy_server.txt|Creating VirtualBox VM|1
 Create_an_installation_drive.txt|Creating a CentOS installation disk|2
 Create_an_installation_clone.txt|Creating a template CentOS VM|3
@@ -52,6 +53,8 @@ Create_iSCSI_initiator_server|Creating a new server which utilises iSCSI backend
 Create_router_server|Creating a new server which can route IP traffic|12
 APPENDIX_A.txt|Template for removal of a VM|N/A
 APPENDIX_B.txt|Process for installing Guest Additions on VM|N/A
+EnablingSSHonPC.txt|Steps for install an open SSH server on a Windows 10 PC|N/A
+
 
 
 
