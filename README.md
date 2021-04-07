@@ -53,7 +53,7 @@ Create_iSCSI_initiator_server|Creating a new server which utilises iSCSI backend
 Create_router_server|Creating a new server which can route IP traffic|12
 APPENDIX_A.txt|Template for removal of a VM|N/A
 APPENDIX_B.txt|Process for installing Guest Additions on VM|N/A
-EnablingSSHonPC.txt|Steps for install an open SSH server on a Windows 10 PC|N/A
+EnablingSSHonPC.txt|Steps for installing an open SSH server on a Windows 10 PC|N/A
 
 
 
