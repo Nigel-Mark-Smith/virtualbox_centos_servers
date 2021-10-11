@@ -5,26 +5,18 @@
 This appendix provides a generic procedure for installing the VirtualBox additions on
 a VM. In this instance the VM used is the 'dummy' VM created in process 'Create dummy server'
 Guest additions should allow operations like cut and paste between Host and Guset VM's. See link
-below for furthe details.
+below for further details:
 
-# a. Mount the ISO image containg the guest additions.
-# 
-# See link below for details:
-#
-# https://www.virtualbox.org/manual/UserManual.html#guestadditions Section 4.1
-# 
-# Use following options to mount ISO image in running VM client as alternative to VBoxManage commands below.
-#
-# Devices->Optical Drives->Chose Disk Image Select C:\Program Files\Oracle\VirtualBox\VBoxGuestAdditions.iso 
-#
-# Or: 
-#
-# Devices->Insert Guest Additions CD Image
+https://www.virtualbox.org/manual/UserManual.html#guestadditions Section 4.1
+
+# a. Mount the Guest Additions DVD image
 
 VBoxManage controlvm dummy poweroff
 VBoxManage modifyvm dummy --boot1 disk --boot2 dvd --boot3 floppy
 VBoxManage storageattach dummy --storagectl SCSI --port 2 --type dvddrive --medium "C:\Program Files\Oracle\VirtualBox\VBoxGuestAdditions.iso"
 VBoxManage startvm dummy
+
+# b. Install Guest Additions software
 
 Double click on CD icon on desk top
 Click 'Run Software'
@@ -32,4 +24,6 @@ Click 'Run'
 [Enter]
 
 VBoxManage controlvm dummy poweroff
+
+
 VBoxManage sharedfolder add dummy --name "InstallationISO" --hostpath X:\VM --readonly --automount

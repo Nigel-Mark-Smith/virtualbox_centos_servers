@@ -19,9 +19,9 @@ VBoxManage createmedium disk --filename X:\VM\dummy\dummy-disk1.vhd -size 20480 
 VBoxManage createmedium disk --filename X:\VM\dummy\dummy-disk2.vhd -size 15360 --format VHD
 VBoxManage storageattach dummy --storagectl SCSI --port 0 --type hdd --medium X:\VM\dummy\dummy-disk1.vhd
 VBoxManage storageattach dummy --storagectl SCSI --port 1 --type hdd --medium X:\VM\dummy\dummy-disk2.vhd
-VBoxManage storageattach dummy --storagectl SCSI --port 2 --type dvddrive --medium X:\VM\CentOS-7-x86_64-Everything-1908.iso
+VBoxManage storageattach dummy --storagectl SCSI --port 2 --type dvddrive --medium X:\VM\CentOS-7-x86_64-Everything-2009.iso
 VBoxManage modifyvm dummy --boot1 disk --boot2 dvd --boot3 floppy --boot4 net
-VBoxManage modifyvm dummy --nic1 bridged --bridgeadapter1 "Realtek PCIe GBE Family Controller"
+VBoxManage modifyvm dummy --nic1 bridged --bridgeadapter1 "Realtek PCIe GbE Family Controller"
 VBoxManage startvm dummy
 
 # b. Install CentOS on the VM.
@@ -29,17 +29,20 @@ VBoxManage startvm dummy
 [F12]		! To display boot device menu
 [c]		! to select DVD
 Select 		'Install CentOS 7'
+[enter]		! Installation should start
 
 Follow the installation steps detailed in sections 'Enter Server Configuration Details'
-and 'Start Installation' of document 'Manual Installation of CentOS on a VirtualBox VM'
-
-[enter]		! Installation should start uninterrupted and then run until a boot is required
-[Reboot]	
+and 'Start Installation' of document 'Manual Installation of CentOS on a VirtualBox VM'.
+At the end of the second section the system is rebooted
 
 # c. Complete the installation process
 
 Follow the installation steps detailed in section 'Complete Installation'
 of document 'Manual Installation of CentOS on a VirtualBox VM'
+
+# d. Set host name 
+
+As root on the VM terminal window.
 
 su -
 hostnamectl set-hostname dummy		! Set the hostname

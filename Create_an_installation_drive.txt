@@ -3,13 +3,10 @@
 ################################
 
 # In this process a disk partiton is created on the 'dummy' VM which contains
-# the extracted contents of the the binary installation image
-# CentOS-7-x86_64-Everything-1908.iso which can act as an 
-# CentOS installation repository when installing CentOS on new VM's. 
-# The kickstart file anaconda-ks.cfg genertated in 
-# the 'Create dummy server' process is also copied onto this
-# installation disk so that these subsequent installations can
-# also be semi-automated using kickstart.
+# the binary installation image CentOS-7-x86_64-Everything-2009.iso which can be used 
+# for installing CentOS on new VM's. The kickstart file anaconda-ks.cfg genertated in 
+# the 'Create dummy server' process is also copied onto this installation disk so that 
+# these subsequent installations can also be semi-automated using kickstart.
 
 VBoxManage startvm dummy
 
@@ -45,18 +42,18 @@ ksvalidator anaconda-ks.cfg
 mv anaconda-ks.cfg ks.cfg		! This is the file name that is assumed by anaconda.
 
 # e. Download Installation DVD ISO image from CentOS web site using FireFox
-#
-# Select ISO file from a suitable mirror site accessed via:
-#
-# https://wiki.centos.org/Download
-#
-# Before downloading this the FireFox download directory must be changed to /Installation
-# 
-# Navigate to Perferences->General->Files and Applications->Downloads set 'Save files to' to /Installation
-# 
-# NOTE: This step may take several hours to complete.
 
-# f. Unmount /Installation 
+Select ISO file from a suitable mirror site accessed via:
+
+https://wiki.centos.org/Download
+
+Before downloading this the FireFox download directory must be changed to /Installation
+
+Navigate to Perferences->General->Files and Applications->Downloads set 'Save files to' to /Installation
+ 
+NOTE: This step may take several hours to complete.
+
+f. Unmount /Installation 
 
 cd /
 umount /Installation
