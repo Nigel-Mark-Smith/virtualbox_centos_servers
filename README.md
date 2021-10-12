@@ -6,7 +6,7 @@ CentOS VirtualBox VM's. The procedures make use of the
 and are intended to be exceuted in the order detailed below building a server
 network capable of supporting PXE installation, LDAP authentication and
 provding iSCSI backend storage. Where detailed the names of the DVD ISO image 
-(CentOS-7-x86_64-Everything-1908.iso) and the bridgeadapter<x> values 
+(CentOS-7-x86_64-Everything-2009.iso) and the bridgeadapter<x> values 
 ('Realtek PCIe GBE Family Controller' and 'Intel(R) Gigabit ET Dual Port 
 Server Adapter') should be replaced by the requisite values returned by 
 the following on your host PC.
@@ -42,7 +42,7 @@ Installation_of_FreeIPA_VirtualBox_VM.docx|Steps for installing FreeIPA software
 Create_dummy_server.txt|Creating VirtualBox VM|1
 Create_an_installation_drive.txt|Creating a CentOS installation disk|2
 Create_an_installation_clone.txt|Creating a template CentOS VM|3
-Create_new_server.txt|Creating a new server (DHCP) using template VM|4
+Create_DHCP_server.txt|Creating a new server (DHCP) using template VM|4
 Complete_DHCP_server_configuration.txt|Completing configuration of DHCP server|5
 Create_a_web_server.txt|Creating a web server|6
 Create_new_server_using_PXE.txt|Creating a new server using PXE|7

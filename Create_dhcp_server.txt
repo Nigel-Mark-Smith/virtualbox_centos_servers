@@ -1,6 +1,6 @@
-#####################
-# Create new server #
-#####################
+######################
+# Create DHCP server #
+######################
 
 # In this process a DCHP server called 'dhcp' is created.
 # The installation uses the installation drive created by
@@ -13,7 +13,7 @@
 VBoxManage clonevm installation --mode all --name dhcp --register
 VBoxManage createmedium disk --filename X:\VM\dhcp\root-disk1.vhd -size 20480 --format VHD
 VBoxManage storageattach dhcp --storagectl SCSI --port 0 --type hdd --medium X:\VM\dhcp\root-disk1.vhd
-VBoxManage storageattach dhcp --storagectl SCSI --port 2 --type dvddrive --medium X:\VM\CentOS-7-x86_64-Everything-1908.iso
+VBoxManage storageattach dhcp --storagectl SCSI --port 2 --type dvddrive --medium X:\VM\CentOS-7-x86_64-Everything-2009.iso
 VBoxManage modifyvm dhcp --boot1 disk --boot2 dvd --boot3 floppy --boot4 net
 
 # b. Start kickstart installation manually
@@ -26,11 +26,11 @@ VBoxManage startvm dhcp
 
 [F12]		! To display boot device menu
 [c]		! to select DVD
-Select 		'Install CentOS 7'
+Highlight 	'Install CentOS 7'
 [tab]		!Should show boot arguments
 Insert 		'inst.repo=hd:LABEL=OEMDRV' before 'inst.stage2=hd:LABEL=...'
 Change 		'inst.stage2=hd:LABEL=...' to 'inst.stage2=hd:LABEL=OEMDRV'
-[enter]		! Installation should start uninterrupted and then run until s boot is required
+[enter]		! Installation should start uninterrupted and then run until a reboot is required
 [Reboot]	
 
 # c. Complete installation

@@ -3,12 +3,12 @@
 #######################
 
 # In this process a new server called 'web' is created by the process
-# detailed in 'Create new server' and configured so it can act as a software 
+# detailed in 'Create dhcp server' and configured so it can act as a software 
 # repository server to support PXE installation via HTTP or NFS (default) . 
 # An additional ethernet interface is added using a PCIe NIC card installed 
 # into the Host PC system.
 
-# a. Create a new server 'web' using the process detailed in 'Create new server'.
+# a. Create a new server named 'web' using the process detailed in steps a. to d. of 'Create dhcp server'.
 
 # b. Add new installation disk and PXE ethernet interface
 
@@ -20,12 +20,7 @@ VBoxManage modifyvm web --nic3 bridged --bridgeadapter3 "Intel(R) Gigabit ET Dua
 VBoxManage modifyvm web --nic4 bridged --bridgeadapter4 "Intel(R) Gigabit ET Dual Port Server Adapter"
 VBoxManage startvm web
 
-# c. Configue and activate PXE ethernet interface
-
-su -
-hostnamectl set-hostname web
-
-# d. Copy ISO DVD contents to new Installation disk
+# c. Copy ISO DVD contents to new Installation disk
 
 gdisk /dev/sdb
 n		! New partition ( all disk )
@@ -52,7 +47,7 @@ cp -r /mnt/install /web   ! this may take some time
 umount /mnt/install
 umount /mnt/disk
 
-# e. Edit kickstart file on new installation disk ( references and installation cdrom ).
+# d. Edit kickstart file on new installation disk ( references and installation cdrom ).
 
 vi /web/install/ks.cfg
 
@@ -62,7 +57,7 @@ remove the following lines:
 	cdrom
 
 
-# f. Install and configure web server
+# e. Install and configure web server
 
 yum groups install -y "Basic Web Server"
 
@@ -132,14 +127,14 @@ semanage fcontext -a -t httpd_sys_content_t "/web(/.*)?"
 restorecon  -R -v /web
 
 
-# g. Start web server and make web services available
+# f. Start web server and make web services available
 
 systemctl start httpd
 systemctl enable httpd
 firewall-cmd --add-service=http --permanent
 firewall-cmd --reload
 
-# h. Install nfs and configure nfs export directories.
+# g. Install nfs and configure nfs export directories.
 
 yum install -y nfs-utils
 
@@ -152,7 +147,7 @@ mount -a
 
 echo "/Installation *(ro)" >> /etc/exports
 
-# i. Set up PXE ethernet interface
+# h. Set up PXE ethernet interface
 
 nmcli con add con-name pxe ifname enp0s8 autoconnect yes type ethernet ip4 10.0.0.4/8 gw4 10.0.0.1
 nmcli con mod pxe ipv4.dns '10.0.0.5'
@@ -162,7 +157,7 @@ echo "10.0.0.3 dhcp.cleosmith.com" >> /etc/hosts
 echo "10.0.0.4 web.cleosmith.com account.cleosmith.com sales.cleosmith.com" >> /etc/hosts
 echo "10.0.0.5 ipa.cleosmith.com" >> /etc/hosts
 
-# j .Start nfs services and add required services to firewall-cmd
+# i .Start nfs services and add required services to firewall-cmd
 
 systemctl start nfs.service
 systemctl enable nfs.service

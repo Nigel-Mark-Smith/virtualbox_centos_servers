@@ -39,29 +39,32 @@
 # Click						'Close' 		Ignore any error messages
 
 		
-
 VBoxManage modifyvm dhcp --nic2 bridged --bridgeadapter2 "Intel(R) Gigabit ET Dual Port Server Adapter"
 
-# b. Start server and configure additional pxe ethernet interface
+# b. Mount installation DVD.
+
+VBoxManage storageattach dhcp --storagectl SCSI --port 1 --type dvddrive --medium X:\VM\CentOS-7-x86_64-Everything-2009.iso
+
+# c. Start server and configure additional pxe ethernet interface
 
 VBoxManage startvm dhcp 				! If required.
 
 su -
 
-# b. Install TFTP, DCHCP, xinetd and syslinux software
+# d. Install TFTP, DCHCP, xinetd and syslinux software
  
 yum install -y tftp-server
 yum install -y dhcp
 yum install -y xinetd
 yum install -y syslinux
 
-# c. Confgure xinetd.
+# e. Confgure xinetd.
 
 vi /etc/xinetd.d/tftp
 
 Change: 'disable = yes' to 'disable = no'
 
-# d. Configure DHCP
+# f. Configure DHCP
 
 vi /etc/dhcp/dhcpd.conf					! This server will use an additonal NIC
 							! card installed on my host PC.
@@ -89,9 +92,9 @@ hardware ethernet  08:00:27:AB:D5:10;
 fixed-address 10.0.0.14;
 }
 
-# e. Configure PXE 
+# g. Configure PXE 
 
-# grep server_args /etc/xinted.d/tftp  ! to check the destination directory 
+# grep server_args /etc/xinetd.d/tftp  ! to check the destination directory 
 #                                      ! for the pxelinix.0 file
 
 mkdir -p /var/lib/tftpboot/pxelinux/pxelinux.cfg
@@ -114,7 +117,6 @@ label Linux
 	kernel images/vmlinuz             
 	append initrd=images/initrd.img ksdevice=bootif inst.ks=http://web.cleosmith.com/install/ks.cfg inst.repo=http://web.cleosmith.com/install
 
-
 vi /var/lib/tftpboot/pxelinux/pxelinux.cfg/nfs
 
 Add:
@@ -130,11 +132,11 @@ label Linux
     kernel images/vmlinuz
     append initrd=images/initrd.img ksdevice=bootif inst.ks=nfs:web.cleosmith.com:/Installation/ks.cfg inst.repo=nfs:web.cleosmith.com:/Installation	
 
-cp '/run/media/user/CentOS 7 x86_64/images/pxeboot/vmlinuz' /var/lib/tftpboot/images
-cp '/run/media/user/CentOS 7 x86_64/images/pxeboot/initrd.img' /var/lib/tftpboot/images
+cp '/run/media/root/CentOS 7 x86_64/images/pxeboot/vmlinuz' /var/lib/tftpboot/pxelinux/images
+cp '/run/media/root/CentOS 7 x86_64/images/pxeboot/initrd.img' /var/lib/tftpboot/pxelinux/images
 ln -s /var/lib/tftpboot/pxelinux/pxelinux.cfg/nfs /var/lib/tftpboot/pxelinux/pxelinux.cfg/default
 
-# f. Set up PXE ethernet interface
+# h. Set up PXE ethernet interface
 
 nmcli con add con-name pxe ifname enp0s8 autoconnect yes type ethernet ip4 10.0.0.3/8 gw4 10.0.0.1
 nmcli con mod pxe ipv4.dns '10.0.0.5'
@@ -144,7 +146,7 @@ echo "10.0.0.3 dhcp.cleosmith.com" >> /etc/hosts
 echo "10.0.0.4 web.cleosmith.com account.cleosmith.com sales.cleosmith.com" >> /etc/hosts
 echo "10.0.0.5 ipa.cleosmith.com" >> /etc/hosts
 
-# g. Start services
+# i. Start services
 
 systemctl start xinetd
 systemctl enable xinetd
