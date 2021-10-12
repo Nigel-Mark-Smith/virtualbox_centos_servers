@@ -3,7 +3,7 @@
 ###############################
 
 # In this exmaple the 'dhcp' and 'web' server created by the processes
-# detailed in 'Create new server' , 'Complete DHCP server configuration'
+# detailed in 'Create DHCP server' , 'Complete DHCP server configuration'
 # and 'Create a web server' are used to facilitate the installation of a new
 # server using PXE (NFS).
 

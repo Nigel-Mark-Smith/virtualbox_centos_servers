@@ -42,18 +42,18 @@ Installation_of_FreeIPA_VirtualBox_VM.docx|Steps for installing FreeIPA software
 Create_dummy_server.txt|Creating VirtualBox VM|1
 Create_an_installation_drive.txt|Creating a CentOS installation disk|2
 Create_an_installation_clone.txt|Creating a template CentOS VM|3
-Create_DHCP_server.txt|Creating a new server (DHCP) using template VM|4
-Complete_DHCP_server_configuration.txt|Completing configuration of DHCP server|5
+Create_dhcp_server.txt|Creating a new server (DHCP) using template VM|4
+Complete_dhcp_server_configuration.txt|Completing configuration of DHCP server|5
 Create_a_web_server.txt|Creating a web server|6
-Create_new_server_using_PXE.txt|Creating a new server using PXE|7
+Create_new_server_using_pxe.txt|Creating a new server using PXE|7
 Create_authentication_server|Creating an LDAP authentication server|8
-Create_server_test_using_PXE|Creating a new server with a fixed IP address using PXE|9
-Create_iSCSI_target_server|Creating a new server which provides iSCSI backend storage|10
-Create_iSCSI_initiator_server|Creating a new server which utilises iSCSI backend storage|11
+Create_server_test_using_pxe|Creating a new server with a fixed IP address using PXE|9
+Create_iscsi_target_server|Creating a new server which provides iSCSI backend storage|10
+Create_iscsi_initiator_server|Creating a new server which utilises iSCSI backend storage|11
 Create_router_server|Creating a new server which can route IP traffic|12
 APPENDIX_A.txt|Template for removal of a VM|N/A
 APPENDIX_B.txt|Process for installing Guest Additions on VM|N/A
-EnablingSSHonPC.txt|Steps for installing an open SSH server on a Windows 10 PC|N/A
+Enabling_SSH_on_Host_PC.txt|Steps for installing an open SSH server on a Windows 10 PC|N/A
 
 
 
