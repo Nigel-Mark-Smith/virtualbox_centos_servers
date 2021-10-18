@@ -154,3 +154,11 @@ systemctl start dhcpd
 systemctl enable dhcpd
 firewall-cmd --add-service=tftp --permanent
 firewall-cmd --reload
+
+# j. Shutdown server
+
+shutdown -h now
+
+# k. Unmount CentOS iso DVD
+
+VBoxManage storageattach dhcp --storagectl SCSI --port 1 --type dvddrive --medium none

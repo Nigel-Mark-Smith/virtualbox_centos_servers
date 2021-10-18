@@ -9,6 +9,11 @@
 # Network Time 
 # DNS
 #
+# The installation uses the installation drive created by
+# the processes detailed in 'Create installation drive' and 
+# 'Create an installation clone'. The installation is semi-automatic 
+# as a result of the kickstart file installed on the drive.
+#
 # Before starting this process you must ensure that the domain cleosmith.com 
 # is not registered by using the following command
 #
@@ -40,22 +45,31 @@
 
 # a. Create VM
 
-VBoxManage setproperty machinefolder Y:\VM
 VBoxManage clonevm installation --mode all --name ipa --register
 VBoxManage modifyvm ipa --memory 2048
-VBoxManage createmedium disk --filename Y:\VM\ipa\root-disk1.vhd -size 20480 --format VHD
-VBoxManage storageattach ipa --storagectl SCSI --port 0 --type hdd --medium Y:\VM\ipa\root-disk1.vhd
+VBoxManage createmedium disk --filename X:\VM\ipa\root-disk1.vhd -size 20480 --format VHD
+VBoxManage storageattach ipa --storagectl SCSI --port 0 --type hdd --medium X:\VM\ipa\root-disk1.vhd
+VBoxManage storageattach ipa --storagectl SCSI --port 1 --type hdd --medium X:\VM\installation\installation-disk1.vhd
+VBoxManage storageattach ipa --storagectl SCSI --port 2 --type dvddrive --medium X:\VM\CentOS-7-x86_64-Everything-2009.iso
 VBoxManage modifyvm ipa --boot1 disk --boot2 dvd --boot3 floppy --boot4 net
 VBoxManage modifyvm ipa --nic1 bridged --bridgeadapter1 "Intel(R) Gigabit ET Dual Port Server Adapter"
+
+# b. Start kickstart installation manually
+#
+# This is started by selecting CD from the boot device
+# menu (F12) and then altering the boot options for
+# 'Install CentOS 7' 
+
 VBoxManage startvm ipa
 
-
-# b. Initiate PXE installation
-
 [F12]		! To display boot device menu
-[l]		! to select LAN
-[enter]		! Installation should start uninterrupted and then run until s boot is required
-[Reboot]	
+[c]		! to select DVD
+Highlight 	'Install CentOS 7'
+[tab]		!Should show boot arguments
+Insert 		'inst.repo=hd:LABEL=OEMDRV' before 'inst.stage2=hd:LABEL=...'
+Change 		'inst.stage2=hd:LABEL=...' to 'inst.stage2=hd:LABEL=OEMDRV'
+[enter]		! Installation should start uninterrupted and then run until a reboot is required
+[Reboot]
 
 # c. Complete installation
 
@@ -76,9 +90,11 @@ Change
 
 shutdown -h now
 
-# d. Add ethernet interface to enable accesss to repositories
+# d. Remove unnecessary disk drives and add ethernet interface to enable accesss to repositories
 
-VBoxManage modifyvm ipa --nic1 bridged --bridgeadapter1 "Realtek PCIe GBE Family Controller"
+VBoxManage storageattach ipa --storagectl SCSI --port 1 --type dvddrive --medium none
+VBoxManage storageattach ipa --storagectl SCSI --port 2 --type dvddrive --medium none
+VBoxManage modifyvm ipa --nic1 bridged --bridgeadapter1 "Realtek PCIe GbE Family Controller"
 VBoxManage modifyvm ipa --nic2 bridged --bridgeadapter2 "Intel(R) Gigabit ET Dual Port Server Adapter"
 VBoxManage startvm ipa
 
@@ -97,10 +113,9 @@ nmcli con up pxe
 echo "10.0.0.3 dhcp.cleosmith.com" >> /etc/hosts
 echo "10.0.0.4 web.cleosmith.com account.cleosmith.com sales.cleosmith.com" >> /etc/hosts
 echo "10.0.0.5 ipa.cleosmith.com" >> /etc/hosts
-shutdown -r now
+shutdown -h now
 
 # h. Install IPA and DNS
-
 
 VBoxManage startvm ipa
 
@@ -151,14 +166,14 @@ enter ldapuser5 as first and last name
 
 ipa user-add nigel
 
+enter nigel as first and last name
+
 ipa passwd ldapuser1 password
 ipa passwd ldapuser2 password
 ipa passwd ldapuser3 password
 ipa passwd ldapuser4 password
 ipa passwd ldapuser5 password
 ipa passwd nigel password
-
-enter nigel as first and last name
 
 # k. Add hosts entries in DNS
 
