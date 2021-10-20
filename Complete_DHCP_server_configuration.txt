@@ -115,7 +115,7 @@ label Linux
 	menu label ^Install CentOS via HTTP            
 	menu default            
 	kernel images/vmlinuz             
-	append initrd=images/initrd.img ksdevice=bootif inst.ks=http://web.cleosmith.com/install/ks.cfg inst.repo=http://web.cleosmith.com/install
+	append initrd=images/initrd.img ksdevice=bootif nameserver=10.0.0.5 inst.ks=http://web.cleosmith.com/install/ks.cfg inst.repo=http://web.cleosmith.com/install
 
 vi /var/lib/tftpboot/pxelinux/pxelinux.cfg/nfs
 
@@ -130,7 +130,7 @@ label Linux
     menu label ^Install CentOS via NFS
     menu default
     kernel images/vmlinuz
-    append initrd=images/initrd.img ksdevice=bootif inst.ks=nfs:web.cleosmith.com:/Installation/ks.cfg inst.repo=nfs:web.cleosmith.com:/Installation	
+    append initrd=images/initrd.img ksdevice=bootif nameserver=10.0.0.5 inst.ks=nfs:web.cleosmith.com:/Installation/ks.cfg inst.repo=nfs:web.cleosmith.com:/Installation	
 
 cp '/run/media/root/CentOS 7 x86_64/images/pxeboot/vmlinuz' /var/lib/tftpboot/pxelinux/images
 cp '/run/media/root/CentOS 7 x86_64/images/pxeboot/initrd.img' /var/lib/tftpboot/pxelinux/images

@@ -34,7 +34,6 @@ This can be downloaded from the following link:
 
 https://www.putty.org/
 
-
 Document File|File Contents|Execution order
 -------------|-------------|---------------
 Manual_Installation_of_CentOS_on_a_VirtualBox_VM.docx|Steps for installing CentOS manually on VM|N/A
@@ -46,11 +45,10 @@ Create_dhcp_server.txt|Creating a new server (DHCP) using template VM|4
 Complete_dhcp_server_configuration.txt|Completing configuration of DHCP server|5
 Create_a_web_server.txt|Creating a web server|6
 Create_authentication_server|Creating an LDAP authentication server|7
-Create_new_server_using_pxe.txt|Creating a new server using PXE|8
-Create_server_test_using_pxe|Creating a new server with a fixed IP address using PXE|9
-Create_iscsi_target_server|Creating a new server which provides iSCSI backend storage|10
-Create_iscsi_initiator_server|Creating a new server which utilises iSCSI backend storage|11
-Create_router_server|Creating a new server which can route IP traffic|12
+Create_server_test_using_pxe|Creating a new server with a fixed IP address using PXE|8
+Create_iscsi_target_server|Creating a new server which provides iSCSI backend storage|9
+Create_iscsi_initiator_server|Creating a new server which utilises iSCSI backend storage|10
+Create_router_server|Creating a new server which can route IP traffic|11
 APPENDIX_A.txt|Template for removal of a VM|N/A
 APPENDIX_B.txt|Process for installing Guest Additions on VM|N/A
 Enabling_SSH_on_Host_PC.txt|Steps for installing an open SSH server on a Windows 10 PC|N/A

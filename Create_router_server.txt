@@ -7,18 +7,19 @@
 #
 # - Access for the pxe network to the internet via masquerading ( NAT )
 # - Access to the web services configured on the web server via port
-#   forwading through the router.
+#   fowarding through the router.
 
 # a. Create a new server 
 
 VBoxManage clonevm installation --mode all --name router --register
-VBoxManage createmedium disk --filename Y:\VM\router\root-disk1.vhd -size 20480 --format VHD
-VBoxManage storageattach router --storagectl SCSI --port 0 --type hdd --medium Y:\VM\router\root-disk1.vhd
+VBoxManage createmedium disk --filename X:\VM\router\root-disk1.vhd -size 20480 --format VHD
+VBoxManage storageattach router --storagectl SCSI --port 0 --type hdd --medium X:\VM\router\root-disk1.vhd
 VBoxManage modifyvm router --boot1 disk --boot2 dvd --boot3 floppy --boot4 net
 VBoxManage modifyvm router --nic1 bridged --bridgeadapter1 "Intel(R) Gigabit ET Dual Port Server Adapter"
-VBoxManage startvm router
 
 # b. Start installation
+
+VBoxManage startvm router
 
 [F12]		! To display boot device menu
 [l]		! to select LAN
@@ -36,7 +37,7 @@ shutdown -h now					! From command terminal
 
 # d. Configure and activate second ethernet interface
 
-VBoxManage modifyvm router --nic1 bridged --bridgeadapter1 "Realtek PCIe GBE Family Controller"
+VBoxManage modifyvm router --nic1 bridged --bridgeadapter1 "Realtek PCIe GbE Family Controller"
 VBoxManage modifyvm router --nic2 bridged --bridgeadapter2 "Intel(R) Gigabit ET Dual Port Server Adapter"
 VBoxManage startvm router
 

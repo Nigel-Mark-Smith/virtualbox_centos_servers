@@ -11,15 +11,16 @@
 # a. Create a new server 
 
 VBoxManage clonevm installation --mode all --name scsi1 --register
-VBoxManage createmedium disk --filename Y:\VM\scsi1\root-disk1.vhd -size 20480 --format VHD
-VBoxManage storageattach scsi1 --storagectl SCSI --port 0 --type hdd --medium Y:\VM\scsi1\root-disk1.vhd
-VBoxManage createmedium disk --filename Y:\VM\scsi1\iscsi-disk1.vhd -size 400 --format VHD
-VBoxManage storageattach scsi1 --storagectl SCSI --port 1 --type hdd --medium Y:\VM\scsi1\iscsi-disk1.vhd
+VBoxManage createmedium disk --filename X:\VM\scsi1\root-disk1.vhd -size 20480 --format VHD
+VBoxManage storageattach scsi1 --storagectl SCSI --port 0 --type hdd --medium X:\VM\scsi1\root-disk1.vhd
+VBoxManage createmedium disk --filename X:\VM\scsi1\iscsi-disk1.vhd -size 400 --format VHD
+VBoxManage storageattach scsi1 --storagectl SCSI --port 1 --type hdd --medium X:\VM\scsi1\iscsi-disk1.vhd
 VBoxManage modifyvm scsi1 --boot1 disk --boot2 dvd --boot3 floppy --boot4 net
 VBoxManage modifyvm scsi1 --nic1 bridged --bridgeadapter1 "Intel(R) Gigabit ET Dual Port Server Adapter"
-VBoxManage startvm scsi1
 
 # b. Start installation
+
+VBoxManage startvm scsi1
 
 [F12]		! To display boot device menu
 [l]		! to select LAN
@@ -37,11 +38,11 @@ shutdown -h now				! From command terminal
 
 # d. Configure and activate teamed ethernet interface using enp0s8 and enp0s9.
 
-VBoxManage modifyvm scsi1 --nic1 bridged --bridgeadapter1 "Realtek PCIe GBE Family Controller"
+VBoxManage modifyvm scsi1 --nic1 bridged --bridgeadapter1 "Realtek PCIe GbE Family Controller"
 VBoxManage modifyvm scsi1 --nic2 bridged --bridgeadapter2 "Intel(R) Gigabit ET Dual Port Server Adapter"
 VBoxManage modifyvm scsi1 --nic3 bridged --bridgeadapter3 "Intel(R) Gigabit ET Dual Port Server Adapter"
-VBoxManage showvminfo scsi1 | findstr /C:"MAC:"  ! Note the MAC address for NIC 2
-VBoxManage modifyvm scsi1 --macaddress3 080027f073e1 ! Set the MAC address to the one determined above.
+VBoxManage modifyvm scsi1 --macaddress2 080027B06494
+VBoxManage modifyvm scsi1 --macaddress3 080027B06494
 VBoxManage startvm scsi1
 
 nmcli con add type team con-name pxe config '{"runner":{"name":"activebackup"}}'
@@ -61,7 +62,6 @@ shutdown -r now
 # e. Create LVM.
 
 fdisk /dev/sdb
-disk /dev/sdb
 n		! New partition ( all disk )
 p
 [Enter]		! Default patition 1
@@ -69,8 +69,7 @@ p
 [Enter]		! Default last sector
 t               ! select partition type
 8e		! LVM partition
-w		! Write partition
-y	
+w		! Write partition	
 
 pvcreate /dev/sdb1
 vgcreate vgsan /dev/sdb1
@@ -101,9 +100,6 @@ tpg1/portals/ create 0.0.0.0 3260
 cd /
 ls
 exit
-
-cat /etc/iscsi/initiatorname.iscsi		! The contents of this file on the 
-						! initiator must be the same as this
 
 # h. Enable service and open required port.
 

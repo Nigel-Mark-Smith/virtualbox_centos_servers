@@ -22,7 +22,7 @@
 # This process and previous processes configure a network using the second 'PXE' 
 # ethernet where the following IP addresses are used or available via DNS. 
 #
-# 10.0.0.1 
+# 10.0.0.1 router.cleosmith.com
 # 10.0.0.2 
 # 10.0.0.3 dhcp.cleosmith.com
 # 10.0.0.4 web.cleosmith.com account.cleosmith.com sales.cleosmith.com
@@ -32,8 +32,8 @@
 # 10.0.0.8 Host PC extra ethernet interface 2
 # 10.0.0.9 
 # 10.0.0.10 
-# 10.0.0.11 server1.cleosmith.com
-# 10.0.0.12 server2.cleosmith.com
+# 10.0.0.11 
+# 10.0.0.12 
 # 10.0.0.13 scsi1.cleosmith.com
 # 10.0.0.14 scsi2.cleosmith.com
 # 10.0.0.15 test.cleosmith.com

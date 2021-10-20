@@ -45,6 +45,7 @@ mount /dev/sdc1 /mnt/disk
 mount -o loop,ro -t iso9660 /mnt/disk/CentOS-7-x86_64-Everything-2009.iso /mnt/install
 cp -r /mnt/install /web   ! this may take some time
 cp -p /mnt/disk/ks.cfg  /web/install/
+chmod 777 /web/install/ks.cfg
 umount /mnt/install
 umount /mnt/disk
 
@@ -64,10 +65,17 @@ yum groups install -y "Basic Web Server"
 
 vi /etc/httpd/conf/httpd.conf
 
-Add
+Change
+
+Listen 80
+
+To
 
 Listen 10.0.0.4:80
-Listen 10.0.0.4:443 https
+
+Add
+
+ServerName localhost:80
 
 Change 
 
@@ -95,8 +103,9 @@ Add
     AllowOverride None
     Require all granted
 </Directory>
+-
 
-vi /etc/httpd/conf.d/account.cleosmith.com.conf
+vi /etc/httpd/conf.d/account.cleosmith.com.cnf
 
 <VirtualHost *:80>
 	DocumentRoot /web/docs/account.cleosmith.com
@@ -107,7 +116,7 @@ vi /etc/httpd/conf.d/account.cleosmith.com.conf
 
 mkdir -p /web/docs/account.cleosmith.com
 
-vi /etc/httpd/conf.d/sales.cleosmith.com.conf
+vi /etc/httpd/conf.d/sales.cleosmith.com.cnnf
 
 <VirtualHost *:80>
 	DocumentRoot /web/docs/sales.cleosmith.com
