@@ -49,7 +49,7 @@ chmod 777 /web/install/ks.cfg
 umount /mnt/install
 umount /mnt/disk
 
-# d. Edit kickstart file on new installation disk ( references and installation cdrom ).
+# d. Edit kickstart file on new installation disk ( references an installation cdrom ).
 
 vi /web/install/ks.cfg
 
