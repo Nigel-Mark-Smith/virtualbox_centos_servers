@@ -1,0 +1,142 @@
+############################
+# Configure ansible server #
+############################
+
+# In this process the router server created in the porcess ... is updated with ansible.
+
+# a. Start 'router' server
+
+VBoxManage startvm router
+
+# b. Update existing software
+
+yum -y update
+
+# c. Install ansible
+
+yum -y install epel-release
+yum -y install ansible
+ansible --version
+
+# d. Create ansible directories in user 'user's home directory.
+
+su  - user
+cd ~
+mkdir -p playbooks/files
+mkdir -p playbooks/templates
+cd playbooks
+
+# e. Create ansible.cfg.
+
+vi ansible.cfg
+
+Add
+
+[defaults]
+inventory = hosts
+nocows = 1
+
+:wq!
+
+# f. Create inventory file.
+
+vi hosts
+
+Add
+
+[thisserver]
+router.cleosmith.com ansible_sever=localhost ansible_port=22
+[coreservers]
+dhcp.cleosmith.com ansible_server=10.0.0.3  ansible_port=22
+web.cleosmith.com ansible_server=10.0.0.4 ansible_port=22
+ipa.cleosmith.com ansible_server=10.0.0.5 ansible_port=22
+[iscsiservers]
+scsi1.cleosmith.com ansible_server=10.0.0.13 ansible_port=22
+scsi2.cleosmith.com ansible_server=10.0.0.14 ansible_port=22
+[testservers]
+test.cleosmith.com ansible_server=10.0.0.14 ansible_port=22
+
+:wq!
+
+# g. Create ssh keys for user 'user' and copy public key to all other hosts.
+
+ssh-keygen -t rsa
+
+With all subsequent commands
+
+- When prompted with 'Are you sure you want to continue connecting' answer 'yes'
+- When prompted with 'Password' enter the paswword of the root user on the remote server 
+
+ssh-copy-id -f user@dhcp.cleosmith.com
+ssh-copy-id -f user@web.cleosmith.com
+ssh-copy-id -f user@ipa.cleosmith.com
+ssh-copy-id -f user@scsi1.cleosmith.com
+ssh-copy-id -f user@scsi2.cleosmith.com 
+ssh-copy-id -f user@test.cleosmith.com
+
+# h. Write a playbook to test installation of user 'user' ssh public key.
+
+vi test_ssh.yml
+
+Add
+
+- name: Test ssh connectivity with ping module
+  hosts: coreservers,iscsiservers,testservers
+  tasks:
+    - name: Ping all servers
+      ping:
+
+:wq!
+
+# i. Test installation of user 'user's 'ssh' public key on all servers.
+
+ansible-playbook test_ssh.yml
+
+# j. Create ssh keys for 'root' user and copy public key to all other hosts.
+
+su - 			! Enter'root' password
+ssh-keygen -t rsa
+
+With all subsequent commands
+
+- When prompted with 'Are you sure you want to continue connecting' answer 'yes'
+- When prompted with 'Password' enter the paswword of the root user on the remote server 
+
+ssh-copy-id -f root@dhcp.cleosmith.com
+ssh-copy-id -f root@web.cleosmith.com
+ssh-copy-id -f root@ipa.cleosmith.com
+ssh-copy-id -f root@scsi1.cleosmith.com
+ssh-copy-id -f root@scsi2.cleosmith.com 
+ssh-copy-id -f root@test.cleosmith.com
+
+exit
+
+# k. Test installation of user 'user's 'ssh' public key on all servers
+
+cd ~/playbooks
+su 					! Enter'root' password
+ansible-playbook test_ssh.yml
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

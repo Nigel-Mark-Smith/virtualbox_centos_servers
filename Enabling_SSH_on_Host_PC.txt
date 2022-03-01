@@ -21,10 +21,12 @@ some computers.
    Click on 			Properties
    Change Startup Type to	Automantic
    Click on			Apply
+   Click on                     OK 
    Right click on 		OpenSSH SSH Server
    Click on 			Properties
    Change Startup Type to	Automantic
    Click on			Apply
+   Click on 			OK
 
    Reboot PC
 
