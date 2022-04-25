@@ -2,7 +2,7 @@
 # Configure ansible server #
 ############################
 
-# In this process the router server created in the porcess ... is updated with ansible.
+# In this process the router server created in the process 'Create_router_server' is updated with ansible.
 
 # a. Start 'router' server
 
