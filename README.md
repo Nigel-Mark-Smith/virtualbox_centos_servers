@@ -49,7 +49,7 @@ Create_server_test_using_pxe|Creating a new server with a fixed IP address using
 Create_iscsi_target_server|Creating a new server which provides iSCSI backend storage|9
 Create_iscsi_initiator_server|Creating a new server which utilises iSCSI backend storage|10
 Create_router_server|Creating a new server which can route IP traffic|11
-Create_an_ansible_server.txt|Adding Ansible to the 'router' server
+Create_an_ansible_server.txt|Adding Ansible to the 'router' server|12
 APPENDIX_A.txt|Template for removal of a VM|N/A
 APPENDIX_B.txt|Process for installing Guest Additions on VM|N/A
 Enabling_SSH_on_Host_PC.txt|Steps for installing an open SSH server on a Windows 10 PC|N/A
